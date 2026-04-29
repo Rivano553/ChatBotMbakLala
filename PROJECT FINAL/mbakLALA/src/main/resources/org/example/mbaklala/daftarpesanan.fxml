@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@style1.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.admin.DaftarPesananController">
+
+    <HBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+
+        <!-- LEFT -->
+        <VBox prefWidth="400" spacing="10" styleClass="left-panel">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+
+            <Label styleClass="title-label" text="Launderly Admin" />
+            <ListView fx:id="listPesanan" VBox.vgrow="ALWAYS" />
+        </VBox>
+
+        <!-- RIGHT -->
+        <VBox spacing="10" styleClass="right-panel" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets bottom="20" left="20" right="20" top="20" />
+            </padding>
+
+            <Label fx:id="lblId" styleClass="detail-title" text="Nomor ID Pesanan : -" />
+            <Label fx:id="lblNama" styleClass="detail-text" text="Nama : -" />
+            <Label fx:id="lblTelp" styleClass="detail-text" text="Nomor Telepon : -" />
+            <Label fx:id="lblLayanan" styleClass="detail-text" text="Layanan : -" />
+            <Label fx:id="lblBerat" styleClass="detail-text" text="Berat : -" />
+            <Label fx:id="lblWaktu" styleClass="detail-text" text="Waktu : -" />
+            <Label fx:id="lblAlamat" styleClass="detail-text" text="Alamat : -" />
+         <Button mnemonicParsing="false" onAction="#handleKembali" prefHeight="25.0" prefWidth="106.0" text="Kembali">
+            <VBox.margin>
+               <Insets />
+            </VBox.margin>
+         </Button>
+        </VBox>
+
+    </HBox>
+</AnchorPane>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="900" prefWidth="600" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.LoginController">
+
+    <children>
+
+        <VBox alignment="CENTER" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+            <Label styleClass="title" text="Launderly">
+                <VBox.margin>
+                    <Insets top="30.0" />
+                </VBox.margin>
+            </Label>
+
+            <Label styleClass="subtitle" text="Admin" />
+
+            <TextField fx:id="usernameField" prefWidth="250" promptText="Username" styleClass="input">
+                <VBox.margin>
+                    <Insets left="100.0" right="100.0" />
+                </VBox.margin>
+            </TextField>
+
+            <PasswordField fx:id="passwordField" prefHeight="33.0" prefWidth="400.0" promptText="Password" styleClass="input">
+                <VBox.margin>
+                    <Insets left="100.0" right="100.0" />
+                </VBox.margin>
+            </PasswordField>
+
+            <Button onAction="#handleLogin" prefHeight="25.0" prefWidth="90.0" styleClass="button-login" text="Login" />
+
+            <Label fx:id="messageLabel" styleClass="error-text" />
+
+        </VBox>
+
+    </children>
+</AnchorPane>

@@ -1,0 +1,122 @@
+.root-container {
+    -fx-background-color: #dcdcf5;
+}
+
+.title-label {
+    -fx-font-size: 30px;
+    -fx-text-fill: #7aa6d9;
+    -fx-font-family: "Segoe Script";
+}
+
+.card {
+    -fx-pref-width: 180px;
+    -fx-pref-height: 100px;
+    -fx-alignment: center;
+    -fx-background-radius: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 8,0,0,3);
+}
+
+.card-blue { -fx-background-color: #bcd3f2; }
+.card-pink { -fx-background-color: #e5d0e6; }
+.card-green { -fx-background-color: #a8d5c2; }
+
+.activity-box {
+    -fx-background-color: #f7f7f7;
+    -fx-background-radius: 15;
+}
+
+.footer {
+    -fx-background-color: #c6c3e6;
+    -fx-padding: 15;
+}
+.left-panel {
+    -fx-background-color: #dcdcf5;
+}
+
+.right-panel {
+    -fx-background-color: #f7f7f7;
+    -fx-background-radius: 15;
+}
+
+.title-label {
+    -fx-font-size: 22px;
+    -fx-text-fill: #7aa6d9;
+}
+
+.detail-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.detail-text {
+    -fx-font-size: 14px;
+}
+.root {
+    -fx-background-color: #dcdcf5;
+    -fx-padding: 20;
+}
+
+.title {
+    -fx-font-size: 28px;
+    -fx-text-fill: #7aa6d9;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 20;
+    -fx-pref-width: 350;
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: #4a7fb5;
+}
+
+.item {
+    -fx-background-color: #8fa9c4;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+.btn {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+}
+.root {
+    -fx-background-color: #dcdcf5;
+    -fx-padding: 20;
+}
+
+.title {
+    -fx-font-size: 28px;
+    -fx-text-fill: #7aa6d9;
+}
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+    -fx-padding: 20;
+    -fx-pref-width: 350;
+}
+
+.card-title {
+    -fx-font-size: 18px;
+    -fx-text-fill: #4a7fb5;
+}
+
+.item {
+    -fx-background-color: #8fa9c4;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+    -fx-alignment: center-left;
+}
+
+.btn {
+    -fx-background-color: white;
+    -fx-background-radius: 20;
+}
+
+.footer {
+    -fx-padding: 15;
+}

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane stylesheets="@style1.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.admin.AdminController">
+
+    <VBox spacing="20" styleClass="root-container" AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+
+        <padding>
+            <Insets bottom="20" left="20" right="20" top="20" />
+        </padding>
+
+        <Label styleClass="title-label" text="Launderly Admin" />
+
+        <!-- CARD -->
+        <HBox alignment="CENTER" spacing="20">
+
+            <VBox styleClass="card card-blue">
+                <Label fx:id="lblPesananBaru" styleClass="card-number" text="0">
+               <VBox.margin>
+                  <Insets left="30.0" />
+               </VBox.margin></Label>
+                <Label styleClass="card-text" text="Pesanan Baru" />
+            <HBox.margin>
+               <Insets right="70.0" />
+            </HBox.margin>
+            </VBox>
+
+            <VBox styleClass="card card-pink">
+                <Label fx:id="lblPelanggan" styleClass="card-number" text="0">
+               <VBox.margin>
+                  <Insets left="20.0" />
+               </VBox.margin></Label>
+                <Label styleClass="card-text" text="Pelanggan" />
+            <HBox.margin>
+               <Insets right="70.0" />
+            </HBox.margin>
+            </VBox>
+
+            <VBox style="--body-background-color: #a8d5c2;" styleClass="card card-green">
+                <Label fx:id="lblSelesai" styleClass="card-number" text="0">
+               <VBox.margin>
+                  <Insets left="12.0" />
+               </VBox.margin></Label>
+                <Label styleClass="card-text" text="Selesai" />
+            </VBox>
+
+        </HBox>
+
+        <!-- AKTIVITAS -->
+        <VBox spacing="10" styleClass="activity-box">
+            <padding>
+                <Insets bottom="15" left="15" right="15" top="15" />
+            </padding>
+
+            <Label styleClass="section-title" text="• Aktivitas baru" />
+
+            <HBox alignment="CENTER_LEFT">
+                <VBox>
+                    <Label fx:id="lblNama" styleClass="name-text" text="-" />
+                    <Label fx:id="lblAktivitas" styleClass="sub-text" text="-" />
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Label fx:id="lblWaktu" styleClass="time-text" text="-" />
+            </HBox>
+        </VBox>
+
+        <Region VBox.vgrow="ALWAYS" />
+
+        <!-- FOOTER -->
+        <HBox alignment="CENTER" spacing="50" styleClass="footer">
+
+            <Label onMouseClicked="#handlePesananClick" styleClass="footer-text" text="Daftar Pesanan" />
+
+            <Label onMouseClicked="#handlePengaturanClick" styleClass="footer-text" text="Pengaturan Sistem" />
+         <Button mnemonicParsing="false" onAction="#handlekembali3" text="Kembali" />
+
+        </HBox>
+
+    </VBox>
+
+</AnchorPane>

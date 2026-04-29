@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<VBox prefHeight="900.0" prefWidth="600.0" styleClass="main-bg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.BotController">
+    <children>
+        <!-- HEADER (Tidak berubah sesuai keinginanmu) -->
+        <HBox spacing="5">
+            <ImageView fitHeight="150" fitWidth="550.0">
+                <Image url="@img/Launderly.jpg" />
+            <VBox.margin>
+               <Insets left="20.0" />
+            </VBox.margin>
+            <HBox.margin>
+               <Insets left="30.0" />
+            </HBox.margin>
+            </ImageView>
+             <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#handleKembali" styleClass="chat-bubble" text="Back">
+            <HBox.margin>
+               <Insets left="600.0" top="30.0" />
+            </HBox.margin>
+            <effect>
+               <DropShadow height="0.0" offsetX="2.0" offsetY="3.0" radius="0.0" width="0.0">
+                  <color>
+                     <Color opacity="0.4399999976158142" />
+                  </color>
+               </DropShadow>
+            </effect></Button>
+        </HBox>
+
+        <!-- AREA CHAT (Hanya Bagian Ini Yang Bisa Di-Scroll) -->
+        <ScrollPane fx:id="scrollPane" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
+            <content>
+                <VBox fx:id="chatBox" spacing="15">
+                    <padding>
+                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
+                    </padding>
+                </VBox>
+            </content>
+         <VBox.margin>
+            <Insets left="20.0" right="20.0" />
+         </VBox.margin>
+        </ScrollPane>
+
+        <!-- INPUT PESAN (Paling Bawah) -->
+        <HBox alignment="CENTER" prefHeight="68.0" prefWidth="1281.0" styleClass="bottom-container">
+            <children>
+                <HBox alignment="CENTER" prefHeight="48.0" prefWidth="625.0" styleClass="input-bar">
+                    <children>
+                        <TextField fx:id="inputField" onAction="#handleSend" prefHeight="25.0" prefWidth="546.0" promptText="Ketik pesan di sini..." styleClass="text-field-clean" />
+                        <Button onAction="#handleSend" styleClass="send-button" text="➤" />
+                    </children>
+                </HBox>
+              <HBox alignment="CENTER_RIGHT" spacing="15">
+                  <children>
+                      <Button alignment="CENTER_RIGHT" onAction="#handleBuatPesanan" styleClass="chat-bubble" text="Buat Pesanan">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                     <effect>
+                        <DropShadow height="1.0" offsetX="2.0" offsetY="3.0" radius="0.0" width="0.0">
+                           <color>
+                              <Color opacity="0.4399999976158142" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </Button>
+                  </children>
+                  <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets top="10.0" />
+               </HBox.margin>
+              </HBox>
+            </children>
+            <padding><Insets bottom="20.0" left="20.0" right="20.0" /></padding>
+         <VBox.margin>
+            <Insets bottom="20.0" />
+         </VBox.margin>
+        </HBox>
+    </children>
+</VBox>

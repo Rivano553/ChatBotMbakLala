@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.example.mbaklala.admin.InputController"
+            stylesheets="@style1.css">
+
+    <VBox spacing="12" alignment="CENTER"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <Label text="INPUT PESANAN" styleClass="title"/>
+
+        <Label fx:id="lblId" text="ID: #----"/>
+
+        <ComboBox fx:id="cbPelanggan" promptText="Pilih Pelanggan"/>
+        <ComboBox fx:id="cbLayanan" promptText="Pilih Layanan"/>
+
+        <TextField fx:id="tfBerat" promptText="Berat (kg)"/>
+
+        <Label fx:id="lblHarga" text="Harga: -"/>
+        <Label fx:id="lblEstimasi" text="Estimasi: -"/>
+        <Label fx:id="lblTotal" text="Total: -"/>
+
+        <Button text="Simpan" onAction="#handleSimpan"/>
+
+        <Button mnemonicParsing="false" onAction="#handleKembali1" prefHeight="25.0" prefWidth="106.0" text="Kembali">
+        </Button>
+
+    </VBox>
+</AnchorPane>

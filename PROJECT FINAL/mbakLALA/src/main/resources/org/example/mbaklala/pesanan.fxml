@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox prefHeight="800.0" prefWidth="500.0" styleClass="main-bg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.PesananController">
+
+    <children>
+
+        <!-- HEADER -->
+        <VBox alignment="TOP_CENTER" spacing="5">
+            <children>
+                <ImageView fitHeight="160.0" fitWidth="575.0">
+                    <image>
+                        <Image url="@img/Buat Pesanan.jpg" />
+                    </image>
+                    <VBox.margin>
+                        <Insets left="20.0" />
+                    </VBox.margin>
+                </ImageView>
+            </children>
+            <padding>
+                <Insets left="15.0" top="15.0" />
+            </padding>
+        </VBox>
+
+        <!-- FORM INPUT -->
+        <VBox spacing="20.0" VBox.vgrow="ALWAYS">
+
+            <children>
+
+                <!-- NAMA -->
+                <VBox spacing="8.0">
+                    <Label styleClass="sub-text" text="NAMA PELANGGAN" />
+                    <TextField fx:id="txtNama" promptText="Masukkan nama..." styleClass="input-field-custom" />
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+                </VBox>
+
+                <!-- TELEPON -->
+                <VBox spacing="8.0">
+                    <Label styleClass="sub-text" text="NOMOR TELEPON" />
+                    <TextField fx:id="txtTelepon" promptText="0812..." styleClass="input-field-custom" />
+                </VBox>
+
+                <!-- LINK MAP -->
+                <VBox spacing="8.0">
+                    <Label styleClass="sub-text" text="LINK MAPS ALAMAT" />
+                    <TextField fx:id="txtLinkMap" promptText="https://maps.google..." styleClass="input-field-custom" />
+                </VBox>
+
+                <!-- INFO AUTO -->
+                <Label style="-fx-text-fill: gray; -fx-font-size: 11px;" text="⏱ Waktu pesanan akan otomatis mengikuti waktu saat ini" />
+      
+              <!-- BUTTON -->
+              <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                  <children>
+      
+                      <Button onAction="#handleBack" styleClass="chat-bubble" text="Kembali" />
+      
+                      <Button onAction="#handleSimpan" style="-fx-background-color: #B2B2D8; -fx-text-fill: white;" styleClass="chat-bubble" text="Simpan Pesanan" />
+      
+                  </children>
+      
+                  <padding>
+                      <Insets bottom="40.0" right="20.0" />
+                  </padding>
+      
+              </HBox>
+
+            </children>
+
+            <padding>
+                <Insets left="20.0" right="20.0" top="30.0" />
+            </padding>
+         <VBox.margin>
+            <Insets left="300.0" right="300.0" />
+         </VBox.margin>
+
+        </VBox>
+
+    </children>
+</VBox>

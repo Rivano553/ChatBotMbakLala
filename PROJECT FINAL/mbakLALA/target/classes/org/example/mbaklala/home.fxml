@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<StackPane prefHeight="982" prefWidth="1512" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.HomeController">
+
+    <children>
+
+        <VBox alignment="CENTER" spacing="15">
+
+            <ImageView fitHeight="150" fitWidth="507.0">
+                <image>
+                    <Image url="@img/Launderly.jpg" />
+                </image>
+            <VBox.margin>
+               <Insets bottom="30.0" top="100.0" />
+            </VBox.margin>
+            </ImageView>
+            <VBox alignment="TOP_CENTER" onMouseClicked="#openChatbot" prefHeight="61.0" prefWidth="315.0" styleClass="card">
+                <Label id="card-title" styleClass="card-title" text="Chatbot Mbak LALA" textFill="#7796a8">
+               <font>
+                  <Font size="16.0" />
+               </font></Label>
+                <Label styleClass="card-sub" text="Tanyakan pesanan dan cek status" textFill="#4e6b7b" />
+            <VBox.margin>
+               <Insets left="500.0" right="500.0" />
+            </VBox.margin>
+            <effect>
+               <DropShadow height="1.0" offsetY="3.0" radius="0.0" width="0.0">
+                  <color>
+                     <Color opacity="0.4699999988079071" />
+                  </color>
+               </DropShadow>
+            </effect>
+            </VBox>
+
+            <VBox alignment="TOP_CENTER" onMouseClicked="#openAdmin" styleClass="card">
+                <Label id="card-title" styleClass="card-title" text="Admin" textFill="#7796a8">
+               <font>
+                  <Font size="16.0" />
+               </font></Label>
+                <Label styleClass="card-sub" text="Kelola pesanan dan sistem" textFill="#7796a8" />
+            <VBox.margin>
+               <Insets left="500.0" right="500.0" />
+            </VBox.margin>
+            <effect>
+               <DropShadow height="1.0" offsetY="3.0" radius="0.0" width="0.0">
+                  <color>
+                     <Color opacity="0.46704867482185364" />
+                  </color>
+               </DropShadow>
+            </effect>
+            </VBox>
+   
+           <!-- Bubble -->
+           <AnchorPane>
+               <children>
+                   <Circle fill="#00000035" layoutX="145.0" layoutY="113.0" radius="25" styleClass="bubble">
+                  <VBox.margin>
+                     <Insets left="40.0" />
+                  </VBox.margin></Circle>
+                   <Circle fill="#00000032" layoutX="99.0" layoutY="39.0" radius="39.0" styleClass="bubble">
+                  <VBox.margin>
+                     <Insets left="70.0" />
+                  </VBox.margin></Circle>
+                   <Circle fill="#00000047" layoutX="192.0" layoutY="93.0" radius="15" styleClass="bubble">
+                  <VBox.margin>
+                     <Insets left="40.0" />
+                  </VBox.margin></Circle>
+               <Circle fill="#00000032" layoutX="167.0" layoutY="61.0" radius="22.0" styleClass="bubble" />
+               </children>
+           </AnchorPane>
+
+        </VBox>
+
+    </children>
+</StackPane>
