@@ -1,4 +1,4 @@
-package org.example.mbaklala.database;
+package id.ac.ukdw.rplbo.database;
 
 import java.sql.*;
 import java.security.MessageDigest;
@@ -30,6 +30,8 @@ public class Database {
 
     public static void initSchema() {
         try (Connection conn = getConnection(); Statement st = conn.createStatement()) {
+
+            // TABEL ADMIN
             st.execute("CREATE TABLE IF NOT EXISTS admin (id_admin INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT UNIQUE, password TEXT, nama_lengkap TEXT, role TEXT)");
 
             String hashedAdmin123 = hashPassword("admin123");
@@ -39,6 +41,7 @@ public class Database {
             st.execute("INSERT OR IGNORE INTO admin (username, password, nama_lengkap, role) VALUES ('intan', '" + hashedAdmin123 + "', 'Intan Aryani', 'Admin')");
             st.execute("INSERT OR IGNORE INTO admin (username, password, nama_lengkap, role) VALUES ('samuel', '" + hashedAdmin123 + "', 'Samuel Varabu', 'Admin')");
 
+            // TABEL LAYANAN
             st.execute("CREATE TABLE IF NOT EXISTS layanan (id_layanan INTEGER PRIMARY KEY AUTOINCREMENT, kategori TEXT, nama_layanan TEXT, harga_reguler REAL, harga_express REAL, satuan TEXT)");
 
             ResultSet rs = st.executeQuery("SELECT COUNT(*) AS total FROM layanan");
@@ -59,6 +62,7 @@ public class Database {
                         "('Satuan', 'Sprei & Sarung Bantal', 25000, 40000, 'set')");
             }
 
+            // TABEL PESANAN
             st.execute("CREATE TABLE IF NOT EXISTS pesanan (" +
                     "id_pesanan TEXT PRIMARY KEY, " +
                     "nama_pelanggan TEXT, " +
@@ -70,6 +74,7 @@ public class Database {
                     "status TEXT DEFAULT 'Menunggu Jemput', " +
                     "tgl_masuk TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
 
+            // TABEL PESANAN LAYANAN
             st.execute("CREATE TABLE IF NOT EXISTS pesanan_layanan (" +
                     "id_detail INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "id_pesanan TEXT, " +
@@ -79,8 +84,13 @@ public class Database {
                     "total_bayar REAL DEFAULT 0, " +
                     "FOREIGN KEY (id_pesanan) REFERENCES pesanan(id_pesanan) ON DELETE CASCADE)");
 
-            try { st.execute("ALTER TABLE pesanan ADD COLUMN metode_pembayaran TEXT DEFAULT 'Cash'"); } catch (Exception ignored) {}
-            try { st.execute("ALTER TABLE pesanan ADD COLUMN status_bayar TEXT DEFAULT 'Belum Dibayar'"); } catch (Exception ignored) {}
+            try {
+                st.execute("ALTER TABLE pesanan ADD COLUMN metode_pembayaran TEXT DEFAULT 'Cash'");
+            } catch (Exception ignored) {}
+
+            try {
+                st.execute("ALTER TABLE pesanan ADD COLUMN status_bayar TEXT DEFAULT 'Belum Dibayar'");
+            } catch (Exception ignored) {}
 
         } catch (Exception e) {
             e.printStackTrace();
