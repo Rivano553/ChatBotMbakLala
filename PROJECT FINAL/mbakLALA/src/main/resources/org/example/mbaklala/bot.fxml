@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.model.BotController">
+<VBox prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.BotController">
 
     <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="1280.0" spacing="15" style="-fx-background-color: white; -fx-padding: 10 35; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 3);">
         <ImageView fitHeight="78.0" fitWidth="170.0" preserveRatio="true">
             <image><Image url="@img/Launderly.png" /></image>
         </ImageView>
         <Region HBox.hgrow="ALWAYS" />
-        <Label style="-fx-text-fill: #1e4581; -fx-font-size: 20px; -fx-font-family: 'Segoe UI', sans-serif; -fx-font-weight: bold;" text="Layanan Informasi Otomatis" />
+        <Label style="-fx-text-fill: #1e4581; -fx-font-size: 20px; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold;" text="Layanan Informasi Otomatis" />
         <Region HBox.hgrow="ALWAYS" />
         <Button onAction="#handleKembali" style="-fx-background-color: white; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-border-radius: 8; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 5, 0, 0, 2);" text="Kembali" />
     </HBox>
@@ -34,9 +35,7 @@
 
     <HBox alignment="CENTER" prefHeight="75" style="-fx-background-color: white; -fx-padding: 12 35; -fx-spacing: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, -4);">
         <TextField fx:id="inputField" onAction="#handleSend" promptText="Ketik pertanyaan, atau ketik Nama/ID untuk cek status..." style="-fx-background-color: #F0F4F8; -fx-background-radius: 20; -fx-padding: 10 25; -fx-font-size: 14px; -fx-border-color: transparent;" HBox.hgrow="ALWAYS" />
-
         <Button onAction="#handleSend" style="-fx-background-color: #30a8d4; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10 25; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-effect: dropshadow(three-pass-box, rgba(48,168,212,0.4), 10, 0, 0, 3);" text="Kirim Pesan" />
-
         <Button onAction="#handleBuatPesanan" style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10 25; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-effect: dropshadow(three-pass-box, rgba(193,108,218,0.4), 10, 0, 0, 3);" text="Order Laundry" />
     </HBox>
 </VBox>

@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.example.mbaklala.admin.InputController"
-            stylesheets="@style1.css">
+<ScrollPane fitToWidth="true" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.admin.InputController">
+    <VBox alignment="TOP_CENTER" style="-fx-padding: 40;">
+        <VBox spacing="20" maxWidth="750" style="-fx-background-color: white; -fx-padding: 40 50; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 15, 0, 0, 5);">
+            <Label text="Input Kuantitas &amp; Berat" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';" />
 
-    <VBox spacing="12" alignment="CENTER"
-          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
-          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+            <ComboBox fx:id="cbPesanan" onAction="#onPesananSelected" maxWidth="Infinity" promptText="Pilih ID Pesanan dari daftar antrean..." style="-fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 6; -fx-padding: 8; -fx-font-family: 'Segoe UI';" />
 
-        <Label text="INPUT PESANAN" styleClass="title"/>
+            <VBox style="-fx-background-color: #F8F9FA; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #E5E7E9; -fx-border-radius: 8;" spacing="10">
+                <Label fx:id="lblNama" text="Nama Pelanggan: -" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+                <Label fx:id="lblTelp" text="Nomor Kontak: -" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+                <Label fx:id="lblAlamat" text="Alamat Jemput: -" wrapText="true" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+            </VBox>
 
-        <Label fx:id="lblId" text="ID: #----"/>
+            <Separator />
 
-        <ComboBox fx:id="cbPelanggan" promptText="Pilih Pelanggan"/>
-        <ComboBox fx:id="cbLayanan" promptText="Pilih Layanan"/>
+            <Label text="Rincian Qty / Berat per Layanan:" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-size: 16px; -fx-font-family: 'Segoe UI';" />
 
-        <TextField fx:id="tfBerat" promptText="Berat (kg)"/>
+            <VBox fx:id="vboxLayanan" spacing="12" />
 
-        <Label fx:id="lblHarga" text="Harga: -"/>
-        <Label fx:id="lblEstimasi" text="Estimasi: -"/>
-        <Label fx:id="lblTotal" text="Total: -"/>
+            <Separator />
 
-        <Button text="Simpan" onAction="#handleSimpan"/>
+            <HBox alignment="CENTER_RIGHT" style="-fx-background-color: #FCF4FD; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #c16cda; -fx-border-radius: 8;">
+                <Label fx:id="lblGrandTotal" text="Total Tagihan: Rp 0" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #c16cda; -fx-font-family: 'Segoe UI';" />
+            </HBox>
 
-        <Button mnemonicParsing="false" onAction="#handleKembali1" prefHeight="25.0" prefWidth="106.0" text="Kembali">
-        </Button>
-
+            <HBox spacing="15" alignment="CENTER_RIGHT">
+                <Button text="Batal &amp; Kembali" onAction="#handleKembali1" style="-fx-background-color: white; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-cursor: hand; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 10 25; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-font-size: 13px;" />
+                <Button text="Simpan Data &amp; Proses Pesanan" onAction="#handleSimpan" style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 10 30; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-font-size: 13px;" />
+            </HBox>
+        </VBox>
     </VBox>
-</AnchorPane>
+</ScrollPane>

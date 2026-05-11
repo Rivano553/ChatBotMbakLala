@@ -1,38 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.*?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.model.LoginController">
+<VBox alignment="CENTER" prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.LoginController">
 
-    <VBox alignment="CENTER" spacing="20"
-          style="-fx-background-color: white; -fx-padding: 45; -fx-background-radius: 18; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 25, 0, 0, 10); -fx-max-width: 400;">
+    <VBox alignment="CENTER" spacing="20" style="-fx-background-color: white; -fx-padding: 45; -fx-background-radius: 18; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 25, 0, 0, 10); -fx-max-width: 400;">
 
         <ImageView fitHeight="75" fitWidth="250" preserveRatio="true">
             <image><Image url="@img/Launderly.png" /></image>
         </ImageView>
 
         <VBox alignment="CENTER" spacing="5">
-            <Label style="-fx-font-weight: bold; -fx-font-size: 17px; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';" text="Sistem Manajemen Laundry" textFill="#1e4581" />
+            <Label style="-fx-font-weight: bold; -fx-font-size: 17px; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';" text="Sistem Manajemen Laundry" />
             <Label style="-fx-text-fill: #30a8d4; -fx-font-size: 14px; -fx-font-family: 'Segoe UI';" text="Otorisasi Akses Admin" />
             <VBox.margin><Insets bottom="10" /></VBox.margin>
         </VBox>
 
-        <TextField fx:id="usernameField" promptText="Username"
-                   style="-fx-padding: 12; -fx-background-radius: 8; -fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 8; -fx-pref-width: 300; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);" />
+        <TextField fx:id="usernameField" promptText="Username" style="-fx-padding: 12; -fx-background-radius: 8; -fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 8; -fx-pref-width: 300; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);" />
 
-        <PasswordField fx:id="passwordField" promptText="Password"
-                       style="-fx-padding: 12; -fx-background-radius: 8; -fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 8; -fx-pref-width: 300; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);" />
+        <PasswordField fx:id="passwordField" promptText="Password" style="-fx-padding: 12; -fx-background-radius: 8; -fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 8; -fx-pref-width: 300; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.05), 5, 0, 0, 1);" />
 
-        <Button onAction="#handleLogin"
-                style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-padding: 10 25; -fx-background-radius: 8; -fx-font-weight: bold; -fx-font-size: 14px; -fx-pref-width: 300; -fx-cursor: hand; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(three-pass-box, rgba(193,108,218,0.4), 12, 0, 0, 5);">
+        <Button text="Masuk ke Sistem" onAction="#handleLogin" style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-padding: 10 25; -fx-background-radius: 8; -fx-font-weight: bold; -fx-font-size: 14px; -fx-pref-width: 300; -fx-cursor: hand; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(three-pass-box, rgba(193,108,218,0.4), 12, 0, 0, 5);">
             <VBox.margin><Insets top="10" /></VBox.margin>
-            <text>Masuk ke Sistem</text>
         </Button>
 
-        <Button onAction="#handleBack"
-                style="-fx-background-color: transparent; -fx-text-fill: #95A5A6; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 13px; -fx-font-family: 'Segoe UI';" text="Kembali ke Beranda" />
+        <Button text="Kembali ke Beranda" onAction="#handleBack" style="-fx-background-color: transparent; -fx-text-fill: #95A5A6; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-size: 13px; -fx-font-family: 'Segoe UI';" />
 
         <Label fx:id="messageLabel" style="-fx-font-size: 13px; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';" />
     </VBox>

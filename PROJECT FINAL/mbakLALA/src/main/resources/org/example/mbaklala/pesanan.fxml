@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<StackPane prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.model.PesananController">
+<StackPane prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.PesananController">
 
-    <VBox alignment="TOP_CENTER" spacing="15" maxWidth="650"
-          style="-fx-background-color: white; -fx-padding: 40 50; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.18), 25, 0, 0, 10);">
+    <VBox alignment="TOP_CENTER" spacing="15" maxWidth="650" style="-fx-background-color: white; -fx-padding: 40 50; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.18), 25, 0, 0, 10);">
 
         <ImageView fitHeight="80" fitWidth="260" preserveRatio="true">
             <image><Image url="@img/Launderly.png" /></image>
@@ -19,7 +18,6 @@
         <Separator style="-fx-padding: 5 0;"/>
 
         <VBox spacing="15" alignment="CENTER_LEFT">
-
             <VBox spacing="5">
                 <HBox>
                     <Label text="Nama Lengkap " style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
@@ -50,10 +48,8 @@
                     <Label text="*" style="-fx-font-weight: bold; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';"/>
                 </HBox>
                 <HBox spacing="10" alignment="CENTER_LEFT">
-                    <ComboBox fx:id="cbPembayaran" prefWidth="200"
-                              style="-fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 6; -fx-font-family: 'Segoe UI';"/>
-                    <Label text="QRIS: admin akan mengirim barcode via WhatsApp"
-                           style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px; -fx-font-family: 'Segoe UI';"/>
+                    <ComboBox fx:id="cbPembayaran" prefWidth="200" style="-fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 6; -fx-font-family: 'Segoe UI';"/>
+                    <Label text="QRIS: admin akan mengirim barcode via WhatsApp" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px; -fx-font-family: 'Segoe UI';"/>
                 </HBox>
             </VBox>
 
@@ -69,17 +65,13 @@
                 <Label text="Catatan Khusus (Opsional)" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
                 <TextField fx:id="txtCatatan" promptText="Misal: Jangan dicampur luntur" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #BDC3C7; -fx-background-color: #F8F9FA; -fx-font-family: 'Segoe UI';"/>
             </VBox>
-
         </VBox>
 
         <Region VBox.vgrow="ALWAYS"/>
 
         <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 10 0 0 0;">
-            <Button text="Batal" onAction="#handleBatal"
-                    style="-fx-background-color: white; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-border-radius: 8; -fx-padding: 10 25; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
-            <Button text="Kirim" onAction="#handleKirim"
-                    style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 25; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
+            <Button text="Batal" onAction="#handleBatal" style="-fx-background-color: white; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-border-radius: 8; -fx-padding: 10 25; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
+            <Button text="Kirim" onAction="#handleKirim" style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 25; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
         </HBox>
-
     </VBox>
 </StackPane>

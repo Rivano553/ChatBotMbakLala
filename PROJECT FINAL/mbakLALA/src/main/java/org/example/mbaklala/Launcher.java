@@ -16,6 +16,7 @@ public class Launcher extends Application {
         showHome();
     }
 
+    // PATH SUDAH DIPERBAIKI MENJADI /org/example/mbaklala/...
     public static void showHome() { loadScene("/org/example/mbaklala/home.fxml", "Launderly - Home"); }
     public static void showBot() { loadScene("/org/example/mbaklala/bot.fxml", "Chatbot Launderly"); }
     public static void showLogin() { loadScene("/org/example/mbaklala/login.fxml", "Login Admin"); }
@@ -32,7 +33,11 @@ public class Launcher extends Application {
             stage.setScene(scene);
             stage.setMaximized(true);
             stage.show();
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            System.err.println("Gagal memuat FXML di path: " + fxmlPath);
+            e.printStackTrace();
+        }
     }
+
     public static void main(String[] args) { launch(); }
 }

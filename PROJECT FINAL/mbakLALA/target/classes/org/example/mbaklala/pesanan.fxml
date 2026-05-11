@@ -1,86 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<VBox prefHeight="800.0" prefWidth="500.0" styleClass="main-bg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.PesananController">
+<StackPane prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.PesananController">
 
-    <children>
+    <VBox alignment="TOP_CENTER" spacing="15" maxWidth="650" style="-fx-background-color: white; -fx-padding: 40 50; -fx-background-radius: 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.18), 25, 0, 0, 10);">
 
-        <!-- HEADER -->
-        <VBox alignment="TOP_CENTER" spacing="5">
-            <children>
-                <ImageView fitHeight="160.0" fitWidth="575.0">
-                    <image>
-                        <Image url="@img/Buat Pesanan.jpg" />
-                    </image>
-                    <VBox.margin>
-                        <Insets left="20.0" />
-                    </VBox.margin>
-                </ImageView>
-            </children>
-            <padding>
-                <Insets left="15.0" top="15.0" />
-            </padding>
+        <ImageView fitHeight="80" fitWidth="260" preserveRatio="true">
+            <image><Image url="@img/Launderly.png" /></image>
+        </ImageView>
+
+        <Label text="Lengkapi data di bawah ini untuk memproses cucianmu." style="-fx-text-fill: #30a8d4; -fx-font-size: 14px; -fx-font-family: 'Segoe UI';"/>
+
+        <Separator style="-fx-padding: 5 0;"/>
+
+        <VBox spacing="15" alignment="CENTER_LEFT">
+            <VBox spacing="5">
+                <HBox>
+                    <Label text="Nama Lengkap " style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+                    <Label text="*" style="-fx-font-weight: bold; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';"/>
+                </HBox>
+                <TextField fx:id="txtNama" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #BDC3C7; -fx-background-color: #F8F9FA; -fx-font-family: 'Segoe UI';"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <HBox>
+                    <Label text="Nomor Telepon " style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+                    <Label text="*" style="-fx-font-weight: bold; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';"/>
+                </HBox>
+                <TextField fx:id="txtTelepon" promptText="Contoh: 08123456789" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #BDC3C7; -fx-background-color: #F8F9FA; -fx-font-family: 'Segoe UI';"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <HBox>
+                    <Label text="Alamat Lengkap " style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+                    <Label text="*" style="-fx-font-weight: bold; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';"/>
+                </HBox>
+                <TextArea fx:id="txtAlamat" promptText="Alamat atau link Maps..." prefRowCount="3" style="-fx-padding: 5; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #BDC3C7; -fx-background-color: #F8F9FA; -fx-font-family: 'Segoe UI';"/>
+            </VBox>
+
+            <VBox spacing="5">
+                <HBox>
+                    <Label text="Metode Pembayaran " style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+                    <Label text="*" style="-fx-font-weight: bold; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';"/>
+                </HBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="cbPembayaran" prefWidth="200" style="-fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 6; -fx-font-family: 'Segoe UI';"/>
+                    <Label text="QRIS: admin akan mengirim barcode via WhatsApp" style="-fx-text-fill: #7F8C8D; -fx-font-size: 12px; -fx-font-family: 'Segoe UI';"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="10">
+                <HBox>
+                    <Label text="Layanan Laundry " style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+                    <Label text="*" style="-fx-font-weight: bold; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';"/>
+                </HBox>
+                <VBox fx:id="vboxDaftarLayanan" spacing="10" />
+            </VBox>
+
+            <VBox spacing="5">
+                <Label text="Catatan Khusus (Opsional)" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+                <TextField fx:id="txtCatatan" promptText="Misal: Jangan dicampur luntur" style="-fx-padding: 10; -fx-background-radius: 6; -fx-border-radius: 6; -fx-border-color: #BDC3C7; -fx-background-color: #F8F9FA; -fx-font-family: 'Segoe UI';"/>
+            </VBox>
         </VBox>
 
-        <!-- FORM INPUT -->
-        <VBox spacing="20.0" VBox.vgrow="ALWAYS">
+        <Region VBox.vgrow="ALWAYS"/>
 
-            <children>
-
-                <!-- NAMA -->
-                <VBox spacing="8.0">
-                    <Label styleClass="sub-text" text="NAMA PELANGGAN" />
-                    <TextField fx:id="txtNama" promptText="Masukkan nama..." styleClass="input-field-custom" />
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-                </VBox>
-
-                <!-- TELEPON -->
-                <VBox spacing="8.0">
-                    <Label styleClass="sub-text" text="NOMOR TELEPON" />
-                    <TextField fx:id="txtTelepon" promptText="0812..." styleClass="input-field-custom" />
-                </VBox>
-
-                <!-- LINK MAP -->
-                <VBox spacing="8.0">
-                    <Label styleClass="sub-text" text="LINK MAPS ALAMAT" />
-                    <TextField fx:id="txtLinkMap" promptText="https://maps.google..." styleClass="input-field-custom" />
-                </VBox>
-
-                <!-- INFO AUTO -->
-                <Label style="-fx-text-fill: gray; -fx-font-size: 11px;" text="⏱ Waktu pesanan akan otomatis mengikuti waktu saat ini" />
-      
-              <!-- BUTTON -->
-              <HBox alignment="CENTER_RIGHT" spacing="15.0">
-                  <children>
-      
-                      <Button onAction="#handleBack" styleClass="chat-bubble" text="Kembali" />
-      
-                      <Button onAction="#handleSimpan" style="-fx-background-color: #B2B2D8; -fx-text-fill: white;" styleClass="chat-bubble" text="Simpan Pesanan" />
-      
-                  </children>
-      
-                  <padding>
-                      <Insets bottom="40.0" right="20.0" />
-                  </padding>
-      
-              </HBox>
-
-            </children>
-
-            <padding>
-                <Insets left="20.0" right="20.0" top="30.0" />
-            </padding>
-         <VBox.margin>
-            <Insets left="300.0" right="300.0" />
-         </VBox.margin>
-
-        </VBox>
-
-    </children>
-</VBox>
+        <HBox alignment="CENTER_RIGHT" spacing="15" style="-fx-padding: 10 0 0 0;">
+            <Button text="Batal" onAction="#handleBatal" style="-fx-background-color: white; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-border-radius: 8; -fx-padding: 10 25; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
+            <Button text="Kirim" onAction="#handleKirim" style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-background-radius: 8; -fx-padding: 10 25; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
+        </HBox>
+    </VBox>
+</StackPane>

@@ -1,4 +1,4 @@
-package id.ac.ukdw.rplbo.model;
+package org.example.mbaklala.model;
 
 public class Layanan {
     private int id;

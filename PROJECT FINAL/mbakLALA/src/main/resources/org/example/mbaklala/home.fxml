@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.*?>
 
-<StackPane prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.model.HomeController">
+<StackPane prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.HomeController">
     <VBox alignment="CENTER" spacing="25">
         <ImageView fitHeight="130" fitWidth="390" preserveRatio="true">
             <image><Image url="@img/Launderly.png" /></image>
@@ -13,15 +14,13 @@
 
         <Label text="Layanan Laundry Antar-Jemput" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 16px; -fx-text-fill: #30a8d4; -fx-font-style: italic;" />
 
-        <VBox alignment="CENTER" onMouseClicked="#openChatbot" maxWidth="400"
-              style="-fx-background-color: white; -fx-background-radius: 18; -fx-padding: 28; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 20, 0, 0, 8);">
+        <VBox alignment="CENTER" onMouseClicked="#openChatbot" maxWidth="400" style="-fx-background-color: white; -fx-background-radius: 18; -fx-padding: 28; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 20, 0, 0, 8);">
             <Label text="Chatbot Asisten" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #c16cda;" />
             <Label text="Tanya harga, status dan jadwalkan penjemputan" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-text-fill: #7F8C8D;" />
             <VBox.margin><Insets top="15"/></VBox.margin>
         </VBox>
 
-        <VBox alignment="CENTER" onMouseClicked="#openAdmin" maxWidth="400"
-              style="-fx-background-color: white; -fx-background-radius: 18; -fx-padding: 28; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 20, 0, 0, 8);">
+        <VBox alignment="CENTER" onMouseClicked="#openAdmin" maxWidth="400" style="-fx-background-color: white; -fx-background-radius: 18; -fx-padding: 28; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 20, 0, 0, 8);">
             <Label text="Panel Management Staf" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1e4581;" />
             <Label text="Kelola pesanan masuk dan input berat cucian" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-text-fill: #7F8C8D;" />
         </VBox>

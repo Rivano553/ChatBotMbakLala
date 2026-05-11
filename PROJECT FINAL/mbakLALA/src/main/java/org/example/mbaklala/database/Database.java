@@ -1,4 +1,4 @@
-package id.ac.ukdw.rplbo.database;
+package org.example.mbaklala.database;
 
 import java.sql.*;
 import java.security.MessageDigest;

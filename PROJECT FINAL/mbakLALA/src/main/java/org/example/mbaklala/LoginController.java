@@ -1,6 +1,6 @@
-package id.ac.ukdw.rplbo;
+package org.example.mbaklala;
 
-import id.ac.ukdw.rplbo.database.Database;
+import org.example.mbaklala.database.Database;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 

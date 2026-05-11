@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -10,12 +11,10 @@
     </VBox>
 
     <VBox spacing="15" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 20 0 0 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 25, 0, 0, 10);">
-
         <HBox alignment="CENTER_LEFT">
             <Label fx:id="lblJudulKanan" text="Rincian Data Pesanan" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnInputBerat" text="Input Kuantitas / Berat" onAction="#handleInputBerat"
-                    style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 20; -fx-font-weight: bold; -fx-font-size: 13px; -fx-font-family: 'Segoe UI'; -fx-cursor: hand;" />
+            <Button fx:id="btnInputBerat" text="Input Kuantitas / Berat" onAction="#handleInputBerat" style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 20; -fx-font-weight: bold; -fx-font-size: 13px; -fx-font-family: 'Segoe UI'; -fx-cursor: hand;" />
         </HBox>
         <Separator />
 
@@ -43,8 +42,7 @@
             <Label text="Status Bayar" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
             <HBox GridPane.rowIndex="5" GridPane.columnIndex="1" spacing="10" alignment="CENTER_LEFT">
                 <Label fx:id="lblStatusBayar" text="-" style="-fx-font-weight: bold; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';"/>
-                <Button text="Tandai Lunas" onAction="#handleTandaiLunas"
-                        style="-fx-background-color: transparent; -fx-border-color: #27AE60; -fx-text-fill: #27AE60; -fx-border-radius: 4; -fx-padding: 2 10; -fx-font-size: 12px; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
+                <Button text="Tandai Lunas" onAction="#handleTandaiLunas" style="-fx-background-color: transparent; -fx-border-color: #27AE60; -fx-text-fill: #27AE60; -fx-border-radius: 4; -fx-padding: 2 10; -fx-font-size: 12px; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
             </HBox>
 
             <Label text="Status Saat Ini" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
@@ -70,18 +68,15 @@
             <Label text="Perbarui Status Cucian" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
             <HBox spacing="10">
                 <ComboBox fx:id="comboStatus" style="-fx-background-color: transparent; -fx-border-color: #30a8d4; -fx-text-fill: #30a8d4; -fx-border-radius: 6; -fx-padding: 2; -fx-font-family: 'Segoe UI';"/>
-                <Button fx:id="btnUpdate" text="Simpan Status" onAction="#handleUpdateStatus"
-                        style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 6 15; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
+                <Button fx:id="btnUpdate" text="Simpan Status" onAction="#handleUpdateStatus" style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 6 15; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
             </HBox>
         </VBox>
 
         <Region VBox.vgrow="ALWAYS" />
 
         <HBox spacing="15" alignment="CENTER_RIGHT">
-            <Button fx:id="btnHapus" text="Hapus Data Pesanan" onAction="#handleHapus"
-                    style="-fx-background-color: transparent; -fx-border-color: #E74C3C; -fx-text-fill: #E74C3C; -fx-cursor: hand; -fx-border-radius: 6; -fx-padding: 8 18; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
-            <Button text="Kembali ke Dashboard" onAction="#handleKembali"
-                    style="-fx-background-color: transparent; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-cursor: hand; -fx-border-radius: 6; -fx-padding: 8 20; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
+            <Button fx:id="btnHapus" text="Hapus Data Pesanan" onAction="#handleHapus" style="-fx-background-color: transparent; -fx-border-color: #E74C3C; -fx-text-fill: #E74C3C; -fx-cursor: hand; -fx-border-radius: 6; -fx-padding: 8 18; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
+            <Button text="Kembali ke Dashboard" onAction="#handleKembali" style="-fx-background-color: transparent; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-cursor: hand; -fx-border-radius: 6; -fx-padding: 8 20; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
         </HBox>
     </VBox>
 </HBox>

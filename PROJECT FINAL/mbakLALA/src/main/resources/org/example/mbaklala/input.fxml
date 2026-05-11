@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.geometry.Insets?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <ScrollPane fitToWidth="true" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.admin.InputController">
     <VBox alignment="TOP_CENTER" style="-fx-padding: 40;">
         <VBox spacing="20" maxWidth="750" style="-fx-background-color: white; -fx-padding: 40 50; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.06), 15, 0, 0, 5);">
-
             <Label text="Input Kuantitas &amp; Berat" style="-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';" />
 
             <ComboBox fx:id="cbPesanan" onAction="#onPesananSelected" maxWidth="Infinity" promptText="Pilih ID Pesanan dari daftar antrean..." style="-fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 6; -fx-padding: 8; -fx-font-family: 'Segoe UI';" />
