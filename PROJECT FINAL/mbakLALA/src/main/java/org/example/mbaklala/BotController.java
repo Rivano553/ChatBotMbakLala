@@ -6,6 +6,9 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.example.mbaklala.bot.ChatbotEngine;
+import org.example.mbaklala.bot.ChatbotRepository;
+import org.example.mbaklala.bot.IntentService;
 import org.example.mbaklala.database.Database;
 
 import java.sql.*;

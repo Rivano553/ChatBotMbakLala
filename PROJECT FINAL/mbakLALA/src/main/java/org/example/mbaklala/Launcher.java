@@ -4,7 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import java.net.URL;
+import org.example.mbaklala.database.Database;
 
 public class Launcher extends Application {
     private static Stage stage;
@@ -12,65 +12,27 @@ public class Launcher extends Application {
     @Override
     public void start(Stage primaryStage) {
         stage = primaryStage;
+        Database.initSchema();
         showHome();
     }
 
-    // --- HALAMAN HOME ---
-    public static void showHome() {
-        loadScene("/org/example/mbaklala/home.fxml", "Launderly - Home");
-    }
+    public static void showHome() { loadScene("/org/example/mbaklala/home.fxml", "Launderly - Home"); }
+    public static void showBot() { loadScene("/org/example/mbaklala/bot.fxml", "Chatbot Launderly"); }
+    public static void showLogin() { loadScene("/org/example/mbaklala/login.fxml", "Login Admin"); }
+    public static void showPesanan() { loadScene("/org/example/mbaklala/pesanan.fxml", "Buat Pesanan Baru"); }
+    public static void showAdmin() { loadScene("/org/example/mbaklala/dashbor.fxml", "Dashboard Admin"); }
+    public static void showDaftarPesanan() { loadScene("/org/example/mbaklala/daftarpesanan.fxml", "Kelola Data Pesanan"); }
+    public static void showInput() { loadScene("/org/example/mbaklala/input.fxml", "Input Berat & Tagihan"); }
+    public static void showRiwayat() { loadScene("/org/example/mbaklala/riwayat.fxml", "Riwayat Transaksi"); }
 
-    // --- HALAMAN CHATBOT ---
-    public static void showBot() {
-        loadScene("/org/example/mbaklala/bot.fxml", "Chatbot Mbak Lala");
-    }
-
-    // --- HALAMAN LOGIN ---
-    public static void showLogin() {
-        loadScene("/org/example/mbaklala/login.fxml", "Login Admin");
-    }
-
-    // --- HALAMAN PESANAN (BARU) ---
-    public static void showPesanan() {
-        loadScene("/org/example/mbaklala/pesanan.fxml", "Buat Pesanan Baru");
-    }
-    public static void showAdmin() {
-        loadScene("/org/example/mbaklala/dashbor.fxml", "Admin");
-    }
-    public static void showDaftarPesanan() {
-        loadScene("/org/example/mbaklala/daftarpesanan.fxml", "Daftar Pesanan");
-    }
-    public static void showInput() {
-        loadScene("/org/example/mbaklala/input.fxml", "Input");
-    }
-
-    /**
-     * Helper method agar tidak nulis kode yang sama berulang kali
-     * dan memastikan otomatis Maximized
-     */
     private static void loadScene(String fxmlPath, String title) {
         try {
-            URL fxmlLocation = Launcher.class.getResource(fxmlPath);
-            if (fxmlLocation == null) {
-                System.out.println("❌ ERROR: File " + fxmlPath + " tidak ditemukan!");
-                return;
-            }
-
-            FXMLLoader loader = new FXMLLoader(fxmlLocation);
-            Scene scene = new Scene(loader.load(),1280, 720);
-
+            Scene scene = new Scene(new FXMLLoader(Launcher.class.getResource(fxmlPath)).load(), 1280, 720);
             stage.setTitle(title);
             stage.setScene(scene);
             stage.setMaximized(true);
-            stage.setResizable(false);// Memastikan selalu Fullscreen (Maximized)
             stage.show();
-        } catch (Exception e) {
-            System.out.println("❌ Gagal memuat halaman: " + title);
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
     }
-
-    public static void main(String[] args) {
-        launch();
-    }
+    public static void main(String[] args) { launch(); }
 }
