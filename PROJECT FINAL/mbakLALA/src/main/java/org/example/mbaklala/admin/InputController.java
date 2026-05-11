@@ -1,190 +1,94 @@
 package org.example.mbaklala.admin;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import org.example.mbaklala.Launcher;
+import javafx.scene.layout.*;
+import org.example.mbaklala.model.Launcher;
 import org.example.mbaklala.database.Database;
-import org.example.mbaklala.model.Layanan;
-import org.example.mbaklala.model.Pelanggan;
-
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InputController {
+    public static String selectedIdToInput = null;
 
-    @FXML private ComboBox<Pelanggan> cbPelanggan;
-    @FXML private ComboBox<Layanan> cbLayanan;
-    @FXML private TextField tfBerat;
+    @FXML private ComboBox<String> cbPesanan;
+    @FXML private Label lblNama, lblTelp, lblAlamat, lblGrandTotal;
+    @FXML private VBox vboxLayanan;
 
-    @FXML private Label lblHarga;
-    @FXML private Label lblEstimasi;
-    @FXML private Label lblTotal;
-    @FXML private Label lblId;
-
-    private String generatedId;
+    private static class LayananRow { int plId; double hargaDigunakan; TextField tfBerat; Label lblSubtotal; }
+    private final List<LayananRow> rows = new ArrayList<>();
 
     @FXML
     public void initialize() {
-        loadPelanggan();
-        loadLayanan();
-        generateId();
+        try (Connection conn = Database.getConnection(); Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery("SELECT id_pesanan, nama_pelanggan FROM pesanan WHERE status IN ('Menunggu Jemput', 'Antre Cuci', 'Proses Cuci & Setrika')")) {
+            while (rs.next()) cbPesanan.getItems().add(rs.getString("id_pesanan") + " - " + rs.getString("nama_pelanggan"));
+        } catch (Exception e) { e.printStackTrace(); }
 
-        // 🔥 update harga & estimasi saat pilih layanan
-        cbLayanan.setOnAction(e -> updateLayanan());
-
-        // 🔥 auto hitung saat ketik berat
-        tfBerat.textProperty().addListener((obs, oldVal, newVal) -> hitungTotal());
-    }
-
-    // ================= LOAD DATA =================
-
-    private void loadPelanggan() {
-        try (Connection conn = Database.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM pelanggan")) {
-
-            while (rs.next()) {
-                cbPelanggan.getItems().add(
-                        new Pelanggan(
-                                rs.getInt("id_pelanggan"),
-                                rs.getString("nama_pelanggan"),
-                                rs.getString("link_maps")
-                        )
-                );
+        if (selectedIdToInput != null) {
+            for (String item : cbPesanan.getItems()) {
+                if (item.startsWith(selectedIdToInput)) { cbPesanan.setValue(item); cbPesanan.setDisable(true); onPesananSelected(); break; }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            selectedIdToInput = null;
         }
     }
 
-    private void loadLayanan() {
-        try (Connection conn = Database.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery("SELECT * FROM layanan")) {
+    @FXML
+    private void onPesananSelected() {
+        if (cbPesanan.getValue() == null) return;
+        String idPesanan = cbPesanan.getValue().split(" - ")[0].trim();
+        rows.clear(); vboxLayanan.getChildren().clear();
 
-            while (rs.next()) {
-                cbLayanan.getItems().add(
-                        new Layanan(
-                                rs.getInt("id_layanan"),
-                                rs.getString("nama_layanan"),
-                                rs.getDouble("harga_per_unit"),
-                                rs.getString("estimasi")
-                        )
-                );
+        try (Connection conn = Database.getConnection()) {
+            PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM pesanan WHERE id_pesanan = ?");
+            ps1.setString(1, idPesanan);
+            ResultSet rs1 = ps1.executeQuery();
+            if (rs1.next()) { lblNama.setText("Nama: " + rs1.getString("nama_pelanggan")); }
+
+            PreparedStatement ps2 = conn.prepareStatement("SELECT pl.id_detail, l.nama_layanan, pl.jenis_layanan, l.harga_reguler, l.harga_express, pl.berat, l.satuan FROM pesanan_layanan pl JOIN layanan l ON pl.id_layanan = l.id_layanan WHERE pl.id_pesanan = ?");
+            ps2.setString(1, idPesanan);
+            ResultSet rs2 = ps2.executeQuery();
+
+            while (rs2.next()) {
+                LayananRow row = new LayananRow();
+                row.plId = rs2.getInt("id_detail");
+                String jenis = rs2.getString("jenis_layanan"); if (jenis == null) jenis = "Reguler";
+                row.hargaDigunakan = jenis.equalsIgnoreCase("Express") ? rs2.getDouble("harga_express") : rs2.getDouble("harga_reguler");
+                row.tfBerat = new TextField(String.valueOf(rs2.getDouble("berat")));
+                row.tfBerat.textProperty().addListener((obs, o, n) -> hitungTotal());
+                row.lblSubtotal = new Label("Rp 0");
+                HBox baris = new HBox(12);
+                baris.getChildren().addAll(new Label("• " + rs2.getString("nama_layanan")), row.tfBerat, row.lblSubtotal);
+                vboxLayanan.getChildren().add(baris);
+                rows.add(row);
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // ================= AUTO ID =================
-
-    private void generateId() {
-        try (Connection conn = Database.getConnection();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(
-                     "SELECT id_pesanan FROM pesanan ORDER BY id_pesanan DESC LIMIT 1"
-             )) {
-
-            if (rs.next()) {
-                String lastId = rs.getString("id_pesanan").replace("#", "");
-                int next = Integer.parseInt(lastId) + 1;
-                generatedId = "#" + next;
-            } else {
-                generatedId = "#2601";
-            }
-
-            lblId.setText("ID: " + generatedId);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // ================= UPDATE UI =================
-
-    private void updateLayanan() {
-        Layanan l = cbLayanan.getValue();
-        if (l != null) {
-            lblHarga.setText("Harga: Rp " + l.getHarga());
-            lblEstimasi.setText("Estimasi: " + l.getEstimasi());
             hitungTotal();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     private void hitungTotal() {
-        try {
-            Layanan l = cbLayanan.getValue();
-            double berat = Double.parseDouble(tfBerat.getText());
-
-            if (l != null) {
-                double total = berat * l.getHarga();
-                lblTotal.setText("Total: Rp " + String.format("%,.0f", total));
-            }
-
-        } catch (Exception ignored) {}
+        double total = 0;
+        for (LayananRow r : rows) {
+            try { double sub = Double.parseDouble(r.tfBerat.getText()) * r.hargaDigunakan; r.lblSubtotal.setText("Rp " + sub); total += sub; } catch (Exception ignored) {}
+        }
+        lblGrandTotal.setText("Total Tagihan: Rp " + String.format("%,.0f", total));
     }
-
-    // ================= SIMPAN =================
 
     @FXML
     private void handleSimpan() {
-
-        Pelanggan p = cbPelanggan.getValue();
-        Layanan l = cbLayanan.getValue();
-
-        if (p == null || l == null || tfBerat.getText().isEmpty()) {
-            showAlert("Error", "Lengkapi data!");
-            return;
-        }
-
-        try {
-            double berat = Double.parseDouble(tfBerat.getText());
-            double total = berat * l.getHarga();
-
-            try (Connection conn = Database.getConnection();
-                 PreparedStatement ps = conn.prepareStatement(
-                         "INSERT INTO pesanan " +
-                                 "(id_pesanan, id_pelanggan, id_layanan, berat, total_bayar, status, waktu_pengerjaan, alamat_maps, id_admin) " +
-                                 "VALUES (?, ?, ?, ?, ?, 'Antre', ?, ?, ?)"
-                 )) {
-
-                ps.setString(1, generatedId);
-                ps.setInt(2, p.getId());
-                ps.setInt(3, l.getId());
-                ps.setDouble(4, berat);
-                ps.setDouble(5, total);
-                ps.setString(6, l.getEstimasi());
-                ps.setString(7, p.getMaps());
-                ps.setInt(8, 1); // sementara admin = 1
-
-                ps.executeUpdate();
-
-                showAlert("Sukses", "Pesanan berhasil!");
-                generateId();
-                tfBerat.clear();
-                lblTotal.setText("Total: -");
-                Launcher.showAdmin();
-
+        try (Connection conn = Database.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("UPDATE pesanan_layanan SET berat = ?, total_bayar = ? WHERE id_detail = ?");
+            for (LayananRow r : rows) {
+                double qty = Double.parseDouble(r.tfBerat.getText());
+                ps.setDouble(1, qty); ps.setDouble(2, qty * r.hargaDigunakan); ps.setInt(3, r.plId); ps.executeUpdate();
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showAlert("Error", "Gagal simpan!");
-        }
+            conn.createStatement().executeUpdate("UPDATE pesanan SET status = 'Proses Cuci & Setrika' WHERE id_pesanan = '" + cbPesanan.getValue().split(" - ")[0].trim() + "'");
+            Launcher.showDaftarPesanan();
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
-    private void showAlert(String t, String m) {
-        Alert a = new Alert(Alert.AlertType.INFORMATION);
-        a.setTitle(t);
-        a.setContentText(m);
-        a.show();
-    }
-    @FXML
-    private void handleKembali1(ActionEvent event) {
-        Launcher.showAdmin();
-    }
+    @FXML private void handleKembali1(ActionEvent event) { Launcher.showDaftarPesanan(); }
 }
