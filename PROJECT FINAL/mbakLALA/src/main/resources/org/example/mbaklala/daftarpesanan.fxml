@@ -1,42 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane stylesheets="@style1.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.admin.DaftarPesananController">
+<HBox style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.admin.DaftarPesananController">
+    <VBox prefWidth="380" spacing="15" style="-fx-padding: 30;">
+        <Label fx:id="lblJudulKiri" text="Daftar Antrean" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';" />
+        <ListView fx:id="listPesanan" style="-fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: #BDC3C7; -fx-font-family: 'Segoe UI'; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 25, 0, 0, 10);" VBox.vgrow="ALWAYS" />
+    </VBox>
 
-    <HBox AnchorPane.bottomAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0">
+    <VBox spacing="15" HBox.hgrow="ALWAYS" style="-fx-background-color: white; -fx-padding: 40; -fx-background-radius: 20 0 0 20; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 25, 0, 0, 10);">
 
-        <!-- LEFT -->
-        <VBox prefWidth="400" spacing="10" styleClass="left-panel">
-            <padding>
-                <Insets bottom="15" left="15" right="15" top="15" />
-            </padding>
+        <HBox alignment="CENTER_LEFT">
+            <Label fx:id="lblJudulKanan" text="Rincian Data Pesanan" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnInputBerat" text="Input Kuantitas / Berat" onAction="#handleInputBerat"
+                    style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-background-radius: 6; -fx-padding: 8 20; -fx-font-weight: bold; -fx-font-size: 13px; -fx-font-family: 'Segoe UI'; -fx-cursor: hand;" />
+        </HBox>
+        <Separator />
 
-            <Label styleClass="title-label" text="Launderly Admin" />
-            <ListView fx:id="listPesanan" VBox.vgrow="ALWAYS" />
+        <GridPane vgap="15" hgap="20">
+            <columnConstraints>
+                <ColumnConstraints minWidth="130" />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
+
+            <Label text="ID Pesanan" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+            <Label fx:id="lblId" text="-" GridPane.rowIndex="0" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+
+            <Label text="Nama Pelanggan" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+            <Label fx:id="lblNama" text="-" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+
+            <Label text="Nomor Kontak" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+            <Label fx:id="lblTelp" text="-" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+
+            <Label text="Alamat Jemput" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+            <Label fx:id="lblAlamat" text="-" wrapText="true" GridPane.rowIndex="3" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+
+            <Label text="Metode Bayar" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+            <Label fx:id="lblMetodeBayar" text="-" GridPane.rowIndex="4" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+
+            <Label text="Status Bayar" GridPane.rowIndex="5" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+            <HBox GridPane.rowIndex="5" GridPane.columnIndex="1" spacing="10" alignment="CENTER_LEFT">
+                <Label fx:id="lblStatusBayar" text="-" style="-fx-font-weight: bold; -fx-text-fill: #E74C3C; -fx-font-family: 'Segoe UI';"/>
+                <Button text="Tandai Lunas" onAction="#handleTandaiLunas"
+                        style="-fx-background-color: transparent; -fx-border-color: #27AE60; -fx-text-fill: #27AE60; -fx-border-radius: 4; -fx-padding: 2 10; -fx-font-size: 12px; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';"/>
+            </HBox>
+
+            <Label text="Status Saat Ini" GridPane.rowIndex="6" GridPane.columnIndex="0" style="-fx-text-fill: #7F8C8D; -fx-font-family: 'Segoe UI';"/>
+            <Label fx:id="lblStatus" text="-" GridPane.rowIndex="6" GridPane.columnIndex="1" style="-fx-font-weight: bold; -fx-text-fill: #30a8d4; -fx-padding: 4 10; -fx-background-radius: 4; -fx-font-family: 'Segoe UI';"/>
+        </GridPane>
+
+        <VBox style="-fx-background-color: #F8F9FA; -fx-padding: 15; -fx-background-radius: 8; -fx-border-color: #E5E7E9; -fx-border-radius: 8;" spacing="5">
+            <Label text="Layanan Laundry yang Dipesan:" style="-fx-text-fill: #1e4581; -fx-font-size: 13px; -fx-font-weight: bold; -fx-font-family: 'Segoe UI';"/>
+            <VBox fx:id="vboxLayananDetail" spacing="5">
+                <VBox.margin><Insets top="5" bottom="10"/></VBox.margin>
+            </VBox>
+            <Separator />
+            <HBox alignment="CENTER_LEFT">
+                <Label text="Total Tagihan Pelanggan:" style="-fx-text-fill: #30a8d4; -fx-font-size: 14px; -fx-font-family: 'Segoe UI';"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblTotal" text="Rp -" style="-fx-font-weight: bold; -fx-font-size: 26px; -fx-text-fill: #c16cda; -fx-font-family: 'Segoe UI';" />
+            </HBox>
         </VBox>
 
-        <!-- RIGHT -->
-        <VBox spacing="10" styleClass="right-panel" HBox.hgrow="ALWAYS">
-            <padding>
-                <Insets bottom="20" left="20" right="20" top="20" />
-            </padding>
+        <Separator />
 
-            <Label fx:id="lblId" styleClass="detail-title" text="Nomor ID Pesanan : -" />
-            <Label fx:id="lblNama" styleClass="detail-text" text="Nama : -" />
-            <Label fx:id="lblTelp" styleClass="detail-text" text="Nomor Telepon : -" />
-            <Label fx:id="lblLayanan" styleClass="detail-text" text="Layanan : -" />
-            <Label fx:id="lblBerat" styleClass="detail-text" text="Berat : -" />
-            <Label fx:id="lblWaktu" styleClass="detail-text" text="Waktu : -" />
-            <Label fx:id="lblAlamat" styleClass="detail-text" text="Alamat : -" />
-         <Button mnemonicParsing="false" onAction="#handleKembali" prefHeight="25.0" prefWidth="106.0" text="Kembali">
-            <VBox.margin>
-               <Insets />
-            </VBox.margin>
-         </Button>
+        <VBox fx:id="boxPerbaruiStatus" spacing="10">
+            <Label text="Perbarui Status Cucian" style="-fx-font-weight: bold; -fx-text-fill: #1e4581; -fx-font-family: 'Segoe UI';"/>
+            <HBox spacing="10">
+                <ComboBox fx:id="comboStatus" style="-fx-background-color: transparent; -fx-border-color: #30a8d4; -fx-text-fill: #30a8d4; -fx-border-radius: 6; -fx-padding: 2; -fx-font-family: 'Segoe UI';"/>
+                <Button fx:id="btnUpdate" text="Simpan Status" onAction="#handleUpdateStatus"
+                        style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 6; -fx-padding: 6 15; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
+            </HBox>
         </VBox>
 
-    </HBox>
-</AnchorPane>
+        <Region VBox.vgrow="ALWAYS" />
+
+        <HBox spacing="15" alignment="CENTER_RIGHT">
+            <Button fx:id="btnHapus" text="Hapus Data Pesanan" onAction="#handleHapus"
+                    style="-fx-background-color: transparent; -fx-border-color: #E74C3C; -fx-text-fill: #E74C3C; -fx-cursor: hand; -fx-border-radius: 6; -fx-padding: 8 18; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
+            <Button text="Kembali ke Dashboard" onAction="#handleKembali"
+                    style="-fx-background-color: transparent; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-cursor: hand; -fx-border-radius: 6; -fx-padding: 8 20; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px;" />
+        </HBox>
+    </VBox>
+</HBox>
