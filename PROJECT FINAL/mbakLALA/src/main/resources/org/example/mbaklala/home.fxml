@@ -1,84 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
 
-<StackPane prefHeight="982" prefWidth="1512" styleClass="root" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.HomeController">
+<StackPane prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.model.HomeController">
+    <VBox alignment="CENTER" spacing="25">
+        <ImageView fitHeight="130" fitWidth="390" preserveRatio="true">
+            <image><Image url="@img/Launderly.png" /></image>
+            <VBox.margin><Insets bottom="5" top="0" /></VBox.margin>
+        </ImageView>
 
-    <children>
+        <Label text="Layanan Laundry Antar-Jemput" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 16px; -fx-text-fill: #30a8d4; -fx-font-style: italic;" />
 
-        <VBox alignment="CENTER" spacing="15">
-
-            <ImageView fitHeight="150" fitWidth="507.0">
-                <image>
-                    <Image url="@img/Launderly.jpg" />
-                </image>
-            <VBox.margin>
-               <Insets bottom="30.0" top="100.0" />
-            </VBox.margin>
-            </ImageView>
-            <VBox alignment="TOP_CENTER" onMouseClicked="#openChatbot" prefHeight="61.0" prefWidth="315.0" styleClass="card">
-                <Label id="card-title" styleClass="card-title" text="Chatbot Mbak LALA" textFill="#7796a8">
-               <font>
-                  <Font size="16.0" />
-               </font></Label>
-                <Label styleClass="card-sub" text="Tanyakan pesanan dan cek status" textFill="#4e6b7b" />
-            <VBox.margin>
-               <Insets left="500.0" right="500.0" />
-            </VBox.margin>
-            <effect>
-               <DropShadow height="1.0" offsetY="3.0" radius="0.0" width="0.0">
-                  <color>
-                     <Color opacity="0.4699999988079071" />
-                  </color>
-               </DropShadow>
-            </effect>
-            </VBox>
-
-            <VBox alignment="TOP_CENTER" onMouseClicked="#openAdmin" styleClass="card">
-                <Label id="card-title" styleClass="card-title" text="Admin" textFill="#7796a8">
-               <font>
-                  <Font size="16.0" />
-               </font></Label>
-                <Label styleClass="card-sub" text="Kelola pesanan dan sistem" textFill="#7796a8" />
-            <VBox.margin>
-               <Insets left="500.0" right="500.0" />
-            </VBox.margin>
-            <effect>
-               <DropShadow height="1.0" offsetY="3.0" radius="0.0" width="0.0">
-                  <color>
-                     <Color opacity="0.46704867482185364" />
-                  </color>
-               </DropShadow>
-            </effect>
-            </VBox>
-   
-           <!-- Bubble -->
-           <AnchorPane>
-               <children>
-                   <Circle fill="#00000035" layoutX="145.0" layoutY="113.0" radius="25" styleClass="bubble">
-                  <VBox.margin>
-                     <Insets left="40.0" />
-                  </VBox.margin></Circle>
-                   <Circle fill="#00000032" layoutX="99.0" layoutY="39.0" radius="39.0" styleClass="bubble">
-                  <VBox.margin>
-                     <Insets left="70.0" />
-                  </VBox.margin></Circle>
-                   <Circle fill="#00000047" layoutX="192.0" layoutY="93.0" radius="15" styleClass="bubble">
-                  <VBox.margin>
-                     <Insets left="40.0" />
-                  </VBox.margin></Circle>
-               <Circle fill="#00000032" layoutX="167.0" layoutY="61.0" radius="22.0" styleClass="bubble" />
-               </children>
-           </AnchorPane>
-
+        <VBox alignment="CENTER" onMouseClicked="#openChatbot" maxWidth="400"
+              style="-fx-background-color: white; -fx-background-radius: 18; -fx-padding: 28; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 20, 0, 0, 8);">
+            <Label text="Chatbot Asisten" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #c16cda;" />
+            <Label text="Tanya harga, status dan jadwalkan penjemputan" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-text-fill: #7F8C8D;" />
+            <VBox.margin><Insets top="15"/></VBox.margin>
         </VBox>
 
-    </children>
+        <VBox alignment="CENTER" onMouseClicked="#openAdmin" maxWidth="400"
+              style="-fx-background-color: white; -fx-background-radius: 18; -fx-padding: 28; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 20, 0, 0, 8);">
+            <Label text="Panel Management Staf" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #1e4581;" />
+            <Label text="Kelola pesanan masuk dan input berat cucian" style="-fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-text-fill: #7F8C8D;" />
+        </VBox>
+    </VBox>
 </StackPane>
