@@ -1,268 +1,127 @@
 package org.example.mbaklala;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.example.mbaklala.bot.ChatbotEngine;
-import org.example.mbaklala.bot.ChatbotRepository;
 import org.example.mbaklala.bot.IntentService;
 import org.example.mbaklala.database.Database;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.*;
 
 public class BotController {
-
     @FXML private VBox chatBox;
     @FXML private ScrollPane scrollPane;
     @FXML private TextField inputField;
 
-    private ChatbotEngine bot;
-    private List<PatternData> patterns;
-    private Map<String, List<String>> responses;
+    private ChatbotEngine bot = new ChatbotEngine();
+    public static String pendingConfirmation = null;
+    private static final List<Node> savedHistory = new ArrayList<>();
 
     @FXML
     public void initialize() {
+        chatBox.heightProperty().addListener((obs, oldVal, newVal) -> Platform.runLater(() -> scrollPane.setVvalue(1.0)));
+        if (!savedHistory.isEmpty()) { chatBox.getChildren().addAll(savedHistory); }
+        else { addMessage("Halo! Selamat datang di Launderly.\nKetik pertanyaan atau masukkan ID/Nama untuk cek status.", false); }
 
-        // 🔥 auto scroll ke bawah
-        chatBox.heightProperty().addListener((obs, oldVal, newVal) ->
-                scrollPane.setVvalue(1.0));
-
-        // 🔥 cek DB
-        Database.cekKoneksi();
-
-        // 🔥 init chatbot
-        bot = new ChatbotEngine();
-        patterns = ChatbotRepository.loadPatterns();
-        responses = ChatbotRepository.loadResponses();
-
-        // 🔥 opening message
-        addMessage("Halo! Selamat datang di Mbak Lala Laundry 😊", false);
-        addMessage("Mau cek harga, status, atau layanan?", false);
+        if (pendingConfirmation != null) { addMessage(pendingConfirmation, false); pendingConfirmation = null; }
     }
 
-    // =========================
-    // 🔹 HANDLE INPUT
-    // =========================
     @FXML
-    private void handleSend() {
-
-        String input = inputField.getText().trim();
+    private void handleSend(ActionEvent event) {
+        String input = (event.getSource() instanceof Button btn && btn.getUserData() != null) ? btn.getUserData().toString() : inputField.getText().trim();
         if (input.isEmpty()) return;
-
-        addMessage(input, true);
-        inputField.clear();
-
-        String inputLower = input.toLowerCase();
-
-        // 🔥 1. DETEKSI ID PESANAN (#123)
-        Matcher matcher = Pattern.compile("#\\d+").matcher(input);
-        if (matcher.find()) {
-            cariStatusPesanan(matcher.group());
-            return;
-        }
-
-        if (inputLower.contains("layanan") && !inputLower.contains("harga")) {
-
-            addMessage("📋 Layanan kami tersedia:\n" +
-                    "- Pakaian\n" +
-                    "- Boneka\n" +
-                    "- Sepatu\n" +
-                    "- Paket Cuci setrika\n" +
-                    "- Spary\n" +
-                    "- Selimut\n" +
-                    "- Setrika\n" +
-                    "- Dll", false);
-            return;
-        }
-
-        // 🔥 2. DETEKSI INTENT
-        String intent = IntentService.detectIntent(inputLower, patterns);
-
-        System.out.println("INPUT: " + input);
-        System.out.println("INTENT: " + intent);
-
-        // 🔥 3. HANDLE BERDASARKAN INTENT (NO DOUBLE MESSAGE)
-        switch (intent) {
-
-            case "harga":
-                addMessage(bot.process("harga", responses), false);
-                handlePriceList(input);
-                break;
-
-            case "layanan":
-                addMessage(bot.process("layanan", responses), false);
-
-                // kalau user sekalian tanya harga
-                if (inputLower.contains("harga")) {
-                    handlePriceList(input);
-                }
-                break;
-
-            case "status":
-                addMessage("Masukkan ID pesanan kamu ya (contoh: #2601)", false);
-                break;
-
-            case "lokasi":
-                addMessage(bot.process("lokasi", responses), false);
-                break;
-
-            case "opening":
-                addMessage(bot.process("opening", responses), false);
-                break;
-
-            default:
-                addMessage(bot.process("fallback", responses), false);
-        }
+        inputField.clear(); addMessage(input, true); processInput(input);
     }
 
-    // =========================
-    // 🔹 PRICE LIST + ESTIMASI
-    // =========================
-    private void handlePriceList(String input) {
-
-        StringBuilder response = new StringBuilder("📋 Hasil Pencarian:\n\n");
-
-        String inputLower = input.toLowerCase();
-
-        // 🔥 tentukan keyword layanan
-        List<String> layananList = List.of(
-                "boneka", "pakaian", "jaket", "sepatu",
-                "karpet", "selimut", "bedcover", "tas"
-        );
-
-        String keyword = "";
-
-        for (String l : layananList) {
-            if (inputLower.contains(l)) {
-                keyword = l;
-                break;
-            }
+    private void processInput(String input) {
+        String lowerInput = input.toLowerCase();
+        if (input.startsWith("#") || input.toUpperCase().startsWith("LND")) {
+            if (!cariStatusCucian("id", input)) addMessage("Maaf, ID '" + input + "' tidak ditemukan.", false);
+            return;
         }
+        String intent = IntentService.detectIntent(input);
+        if (intent.equals("paketan")) { addMessage(bot.process("paketan"), false); return; }
+        if (cariHargaSpesifik(lowerInput)) return;
 
-        String query;
-
-        if (!keyword.isEmpty()) {
-            query = "SELECT nama_layanan, harga_per_unit, satuan, estimasi " +
-                    "FROM layanan WHERE LOWER(nama_layanan) LIKE ?";
+        if (intent.equals("fallback")) {
+            if (!cariStatusCucian("nama", input)) addMessage(bot.process("fallback"), false);
         } else {
-            // fallback → semua data
-            query = "SELECT nama_layanan, harga_per_unit, satuan, estimasi FROM layanan";
-        }
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            if (!keyword.isEmpty()) {
-                stmt.setString(1, "%" + keyword + "%");
-            }
-
-            ResultSet rs = stmt.executeQuery();
-
-            int i = 1;
-            boolean found = false;
-
-            while (rs.next()) {
-                found = true;
-
-                response.append(i++).append(". ")
-                        .append(rs.getString("nama_layanan"))
-                        .append("\n   Rp")
-                        .append(String.format("%,.0f", rs.getDouble("harga_per_unit")))
-                        .append("/")
-                        .append(rs.getString("satuan"))
-                        .append("\n   ⏱ Estimasi: ")
-                        .append(rs.getString("estimasi"))
-                        .append("\n\n");
-            }
-
-            if (!found) {
-                addMessage("❌ Layanan tidak ditemukan 😢", false);
-            } else {
-                addMessage(response.toString(), false);
-            }
-
-        } catch (Exception e) {
-            addMessage("❌ Gagal mengambil data harga", false);
-            e.printStackTrace();
+            addMessage(bot.process(intent), false);
+            if (intent.equals("harga") || intent.equals("layanan")) tampilkanHargaLayanan();
         }
     }
-    // =========================
-    // 🔹 CEK STATUS PESANAN
-    // =========================
-    private void cariStatusPesanan(String id) {
 
-        String sql = "SELECT p.id_pesanan, pl.nama_pelanggan, p.status, p.total_bayar, p.berat " +
-                "FROM pesanan p JOIN pelanggan pl ON p.id_pelanggan = pl.id_pelanggan " +
-                "WHERE p.id_pesanan = ?";
-
-        try (Connection conn = Database.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, id);
-            ResultSet rs = pstmt.executeQuery();
-
+    private boolean cariStatusCucian(String tipe, String nilai) {
+        String sql = (tipe.equals("id")) ? "SELECT * FROM pesanan WHERE REPLACE(id_pesanan, '-', '') = ?" : "SELECT * FROM pesanan WHERE LOWER(nama_pelanggan) = LOWER(?) ORDER BY tgl_masuk DESC LIMIT 1";
+        try (Connection conn = Database.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, tipe.equals("id") ? nilai.replace("-", "").replace("#", "").toUpperCase() : nilai);
+            ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-
-                String info = "📦 Pesanan Ditemukan!\n\n" +
-                        "Nama: " + rs.getString("nama_pelanggan") +
-                        "\nID: " + rs.getString("id_pesanan") +
-                        "\nStatus: " + rs.getString("status") +
-                        "\nTotal: Rp" + String.format("%,.0f", rs.getDouble("total_bayar")) +
-                        "\nBerat: " + rs.getDouble("berat") + " kg";
-
-                addMessage(info, false);
-
-            } else {
-                addMessage("❌ ID " + id + " tidak ditemukan.", false);
+                String id = rs.getString("id_pesanan");
+                StringBuilder rincian = new StringBuilder();
+                double total = 0;
+                try (PreparedStatement psL = conn.prepareStatement("SELECT l.nama_layanan, pl.jenis_layanan, pl.berat, l.satuan, pl.total_bayar FROM pesanan_layanan pl JOIN layanan l ON pl.id_layanan = l.id_layanan WHERE pl.id_pesanan = ?")) {
+                    psL.setString(1, id);
+                    ResultSet rsL = psL.executeQuery();
+                    while (rsL.next()) {
+                        rincian.append("- ").append(rsL.getString("nama_layanan")).append(" [").append(rsL.getString("jenis_layanan")).append("]");
+                        if (rsL.getDouble("berat") > 0) rincian.append(" (").append(rsL.getDouble("berat")).append(" ").append(rsL.getString("satuan")).append(")");
+                        rincian.append("\n");
+                        total += rsL.getDouble("total_bayar");
+                    }
+                }
+                addMessage("Data Ditemukan!\nID: " + id + "\nStatus: " + rs.getString("status") + "\nTotal: Rp " + String.format("%,.0f", total), false);
+                return true;
             }
-
-        } catch (Exception e) {
-            addMessage("⚠️ Koneksi database bermasalah.", false);
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
+        return false;
     }
 
-    // =========================
-    // 🔹 UI CHAT BUBBLE (FIX)
-    // =========================
+    private boolean cariHargaSpesifik(String input) {
+        StringBuilder response = new StringBuilder("Harga Layanan:\n\n");
+        boolean found = false;
+        try (Connection conn = Database.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SELECT * FROM layanan")) {
+            while (rs.next()) {
+                if (input.contains(rs.getString("nama_layanan").toLowerCase())) {
+                    response.append("• ").append(rs.getString("nama_layanan")).append("\n")
+                            .append("  - Reguler (Est. 2-3 Hari): Rp ").append(String.format("%,.0f", rs.getDouble("harga_reguler"))).append("/").append(rs.getString("satuan")).append("\n")
+                            .append("  - Express (Est. 1 Hari): Rp ").append(String.format("%,.0f", rs.getDouble("harga_express"))).append("/").append(rs.getString("satuan")).append("\n\n");
+                    found = true;
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        if (found) addMessage(response.toString().trim(), false);
+        return found;
+    }
+
+    private void tampilkanHargaLayanan() {
+        StringBuilder res = new StringBuilder("Daftar Layanan:\n");
+        try (Connection conn = Database.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery("SELECT * FROM layanan ORDER BY kategori DESC")) {
+            while (rs.next()) {
+                res.append("• ").append(rs.getString("nama_layanan")).append("\n")
+                        .append("  - Reguler (Est. 2-3 Hari): Rp ").append(String.format("%,.0f", rs.getDouble("harga_reguler"))).append("\n")
+                        .append("  - Express (Est. 1 Hari): Rp ").append(String.format("%,.0f", rs.getDouble("harga_express"))).append("\n");
+            }
+            addMessage(res.toString().trim(), false);
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+
     private void addMessage(String text, boolean isUser) {
-
-        Label label = new Label(text);
-        label.setWrapText(true);
-
-        // 🔥 PENTING: clear dulu biar ga bug style
-        label.getStyleClass().clear();
-
-        label.getStyleClass().add("bubble");
-
-        if (isUser) {
-            label.getStyleClass().add("user-bubble");
-        } else {
-            label.getStyleClass().add("lala-bubble");
-        }
-
-        HBox box = new HBox(label);
-        box.setAlignment(isUser ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
-
-        chatBox.getChildren().add(box);
+        VBox bubble = new VBox(new Label(text));
+        bubble.setStyle("-fx-padding: 10; -fx-background-radius: 10; -fx-background-color: " + (isUser ? "#30a8d4" : "white"));
+        HBox box = new HBox(bubble); box.setAlignment(isUser ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+        chatBox.getChildren().add(box); savedHistory.add(box);
     }
 
-    // =========================
-    // 🔹 NAVIGASI
-    // =========================
-    @FXML
-    private void handleBuatPesanan(ActionEvent e) {
-        Launcher.showPesanan();
-    }
-
-    @FXML
-    private void handleKembali(ActionEvent e) {
-        Launcher.showHome();
-    }
+    @FXML private void handleBuatPesanan() { Launcher.showPesanan(); }
+    @FXML private void handleKembali() { savedHistory.clear(); Launcher.showHome(); }
 }

@@ -2,87 +2,41 @@
 
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
 
-<VBox prefHeight="900.0" prefWidth="600.0" styleClass="main-bg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.BotController">
-    <children>
-        <!-- HEADER (Tidak berubah sesuai keinginanmu) -->
-        <HBox spacing="5">
-            <ImageView fitHeight="150" fitWidth="550.0">
-                <Image url="@img/Launderly.jpg" />
-            <VBox.margin>
-               <Insets left="20.0" />
-            </VBox.margin>
-            <HBox.margin>
-               <Insets left="30.0" />
-            </HBox.margin>
-            </ImageView>
-             <Button alignment="CENTER_RIGHT" contentDisplay="RIGHT" onAction="#handleKembali" styleClass="chat-bubble" text="Back">
-            <HBox.margin>
-               <Insets left="600.0" top="30.0" />
-            </HBox.margin>
-            <effect>
-               <DropShadow height="0.0" offsetX="2.0" offsetY="3.0" radius="0.0" width="0.0">
-                  <color>
-                     <Color opacity="0.4399999976158142" />
-                  </color>
-               </DropShadow>
-            </effect></Button>
-        </HBox>
+<VBox prefHeight="720" prefWidth="1280" style="-fx-background-color: #F0F4F8;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.mbaklala.model.BotController">
 
-        <!-- AREA CHAT (Hanya Bagian Ini Yang Bisa Di-Scroll) -->
-        <ScrollPane fx:id="scrollPane" fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;" VBox.vgrow="ALWAYS">
-            <content>
-                <VBox fx:id="chatBox" spacing="15">
-                    <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="10.0" />
-                    </padding>
-                </VBox>
-            </content>
-         <VBox.margin>
-            <Insets left="20.0" right="20.0" />
-         </VBox.margin>
-        </ScrollPane>
+    <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="1280.0" spacing="15" style="-fx-background-color: white; -fx-padding: 10 35; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 10, 0, 0, 3);">
+        <ImageView fitHeight="78.0" fitWidth="170.0" preserveRatio="true">
+            <image><Image url="@img/Launderly.png" /></image>
+        </ImageView>
+        <Region HBox.hgrow="ALWAYS" />
+        <Label style="-fx-text-fill: #1e4581; -fx-font-size: 20px; -fx-font-family: 'Segoe UI', sans-serif; -fx-font-weight: bold;" text="Layanan Informasi Otomatis" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button onAction="#handleKembali" style="-fx-background-color: white; -fx-border-color: #BDC3C7; -fx-text-fill: #7F8C8D; -fx-border-radius: 8; -fx-padding: 8 20; -fx-cursor: hand; -fx-font-family: 'Segoe UI'; -fx-font-weight: bold; -fx-font-size: 13px; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.08), 5, 0, 0, 2);" text="Kembali" />
+    </HBox>
 
-        <!-- INPUT PESAN (Paling Bawah) -->
-        <HBox alignment="CENTER" prefHeight="68.0" prefWidth="1281.0" styleClass="bottom-container">
-            <children>
-                <HBox alignment="CENTER" prefHeight="48.0" prefWidth="625.0" styleClass="input-bar">
-                    <children>
-                        <TextField fx:id="inputField" onAction="#handleSend" prefHeight="25.0" prefWidth="546.0" promptText="Ketik pesan di sini..." styleClass="text-field-clean" />
-                        <Button onAction="#handleSend" styleClass="send-button" text="➤" />
-                    </children>
-                </HBox>
-              <HBox alignment="CENTER_RIGHT" spacing="15">
-                  <children>
-                      <Button alignment="CENTER_RIGHT" onAction="#handleBuatPesanan" styleClass="chat-bubble" text="Buat Pesanan">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                     <effect>
-                        <DropShadow height="1.0" offsetX="2.0" offsetY="3.0" radius="0.0" width="0.0">
-                           <color>
-                              <Color opacity="0.4399999976158142" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                  </Button>
-                  </children>
-                  <padding>
-                  <Insets bottom="10.0" />
-               </padding>
-               <HBox.margin>
-                  <Insets top="10.0" />
-               </HBox.margin>
-              </HBox>
-            </children>
-            <padding><Insets bottom="20.0" left="20.0" right="20.0" /></padding>
-         <VBox.margin>
-            <Insets bottom="20.0" />
-         </VBox.margin>
-        </HBox>
-    </children>
+    <ScrollPane fx:id="scrollPane" fitToWidth="true" style="-fx-background: transparent; -fx-background-color: transparent;" VBox.vgrow="ALWAYS">
+        <content>
+            <VBox fx:id="chatBox" spacing="18">
+                <padding><Insets bottom="25" left="45" right="45" top="25" /></padding>
+            </VBox>
+        </content>
+    </ScrollPane>
+
+    <HBox alignment="CENTER" spacing="15" style="-fx-background-color: #EBF5FB; -fx-padding: 12; -fx-border-color: #D6EAF8; -fx-border-width: 1 0 0 0;">
+        <Label style="-fx-font-size: 14px; -fx-text-fill: #c16cda; -fx-font-weight: bold; -fx-font-family: 'Segoe UI';" text="Tanya Cepat:" />
+        <Button onAction="#handleSend" style="-fx-background-color: white; -fx-border-color: #30a8d4; -fx-border-radius: 15; -fx-background-radius: 15; -fx-cursor: hand; -fx-text-fill: #1e4581; -fx-padding: 6 18; -fx-font-size: 12px; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(48,168,212,0.15), 5, 0, 0, 1);" text="Daftar Layanan" userData="harga" />
+        <Button onAction="#handleSend" style="-fx-background-color: white; -fx-border-color: #30a8d4; -fx-border-radius: 15; -fx-background-radius: 15; -fx-cursor: hand; -fx-text-fill: #1e4581; -fx-padding: 6 18; -fx-font-size: 12px; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(48,168,212,0.15), 5, 0, 0, 1);" text="Cek Status" userData="status" />
+        <Button onAction="#handleSend" style="-fx-background-color: white; -fx-border-color: #30a8d4; -fx-border-radius: 15; -fx-background-radius: 15; -fx-cursor: hand; -fx-text-fill: #1e4581; -fx-padding: 6 18; -fx-font-size: 12px; -fx-font-weight: bold; -fx-effect: dropshadow(three-pass-box, rgba(48,168,212,0.15), 5, 0, 0, 1);" text="Jam Operasional" userData="jam" />
+    </HBox>
+
+    <HBox alignment="CENTER" prefHeight="75" style="-fx-background-color: white; -fx-padding: 12 35; -fx-spacing: 15; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 15, 0, 0, -4);">
+        <TextField fx:id="inputField" onAction="#handleSend" promptText="Ketik pertanyaan, atau ketik Nama/ID untuk cek status..." style="-fx-background-color: #F0F4F8; -fx-background-radius: 20; -fx-padding: 10 25; -fx-font-size: 14px; -fx-border-color: transparent;" HBox.hgrow="ALWAYS" />
+
+        <Button onAction="#handleSend" style="-fx-background-color: #30a8d4; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10 25; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-effect: dropshadow(three-pass-box, rgba(48,168,212,0.4), 10, 0, 0, 3);" text="Kirim Pesan" />
+
+        <Button onAction="#handleBuatPesanan" style="-fx-background-color: #c16cda; -fx-text-fill: white; -fx-background-radius: 20; -fx-padding: 10 25; -fx-cursor: hand; -fx-font-weight: bold; -fx-font-family: 'Segoe UI'; -fx-font-size: 14px; -fx-effect: dropshadow(three-pass-box, rgba(193,108,218,0.4), 10, 0, 0, 3);" text="Order Laundry" />
+    </HBox>
 </VBox>
