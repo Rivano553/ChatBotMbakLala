@@ -16,7 +16,6 @@ public class Launcher extends Application {
         showHome();
     }
 
-    // PATH SUDAH DIPERBAIKI MENJADI /org/example/mbaklala/...
     public static void showHome() { loadScene("/org/example/mbaklala/home.fxml", "Launderly - Home"); }
     public static void showBot() { loadScene("/org/example/mbaklala/bot.fxml", "Chatbot Launderly"); }
     public static void showLogin() { loadScene("/org/example/mbaklala/login.fxml", "Login Admin"); }
