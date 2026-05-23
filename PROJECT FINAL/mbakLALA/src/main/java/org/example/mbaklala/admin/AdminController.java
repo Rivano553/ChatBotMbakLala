@@ -51,7 +51,6 @@ public class AdminController {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // Helper method agar kode tidak berulang-ulang
     private String getCount(Statement st, String status) throws SQLException {
         ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM pesanan WHERE status = '" + status + "'");
         return rs.next() ? rs.getString("total") : "0";

@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.example.mbaklala.BotController;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,6 +28,7 @@ public class PesananController {
     @FXML private TextField txtCatatan;
     @FXML private ComboBox<String> cbPembayaran;
 
+    // Menyimpan daftar layanan dari database
     private ObservableList<String> daftarBarang = FXCollections.observableArrayList();
     private ObservableList<String> daftarTipe = FXCollections.observableArrayList("Reguler", "Express");
 
@@ -35,10 +37,12 @@ public class PesananController {
         loadLayananDariDatabase();
         tambahBarisInput();
 
+        // Set default pilihan pembayaran
         cbPembayaran.setItems(FXCollections.observableArrayList("Cash", "QRIS"));
         cbPembayaran.setValue("Cash");
     }
 
+    // Menarik daftar nama layanan database
     private void loadLayananDariDatabase() {
         daftarBarang.clear();
         try (Connection conn = Database.getConnection();
@@ -53,6 +57,7 @@ public class PesananController {
         }
     }
 
+    // ComboBox laundry
     private void tambahBarisInput() {
         HBox barisBaru = new HBox(10);
         barisBaru.setAlignment(Pos.CENTER_LEFT);
@@ -96,6 +101,7 @@ public class PesananController {
         String catatan = txtCatatan.getText().trim();
         String metodeBayar = cbPembayaran.getValue();
 
+        // Cek kekosongan data
         if (nama.isEmpty() || telp.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Peringatan");
@@ -105,6 +111,7 @@ public class PesananController {
             return;
         }
 
+        // Pesanan sebelumnya belum Selesai
         try (Connection conn = Database.getConnection()) {
             String sqlCek = "SELECT status FROM pesanan WHERE LOWER(nama_pelanggan) = LOWER(?) AND status != 'Selesai' LIMIT 1";
             try (PreparedStatement psCek = conn.prepareStatement(sqlCek)) {
@@ -124,6 +131,7 @@ public class PesananController {
             e.printStackTrace();
         }
 
+        // Membuat ID Pesanan
         String timeStamp = new SimpleDateFormat("ddMMyy").format(new Date());
         int randomNum = (int) (Math.random() * 9000) + 1000;
         String idPesanan = "LND-" + timeStamp + "-" + randomNum;
@@ -131,6 +139,7 @@ public class PesananController {
         StringBuilder rincian = new StringBuilder();
         int jumlahLayanan = 0;
 
+        // Simpan ke database
         try (Connection conn = Database.getConnection()) {
             String sqlPesanan = "INSERT INTO pesanan (id_pesanan, nama_pelanggan, no_telepon, alamat_jemput, deskripsi, metode_pembayaran) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps1 = conn.prepareStatement(sqlPesanan)) {
@@ -174,6 +183,7 @@ public class PesananController {
             return;
         }
 
+        // Minimal 1 barang dipilih
         if (jumlahLayanan == 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Peringatan");

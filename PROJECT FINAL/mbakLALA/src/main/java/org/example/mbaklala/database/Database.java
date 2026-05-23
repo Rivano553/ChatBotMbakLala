@@ -12,6 +12,7 @@ public class Database {
         return conn;
     }
 
+    // Mengubah password menjadi hash
     public static String hashPassword(String password) {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");

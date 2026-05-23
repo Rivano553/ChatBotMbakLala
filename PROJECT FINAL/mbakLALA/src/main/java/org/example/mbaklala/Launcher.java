@@ -16,6 +16,7 @@ public class Launcher extends Application {
         showHome();
     }
 
+    // Memanggil halaman FXML tertentu
     public static void showHome() { loadScene("/org/example/mbaklala/home.fxml", "Launderly - Home"); }
     public static void showBot() { loadScene("/org/example/mbaklala/bot.fxml", "Chatbot Launderly"); }
     public static void showLogin() { loadScene("/org/example/mbaklala/login.fxml", "Login Admin"); }
@@ -25,11 +26,13 @@ public class Launcher extends Application {
     public static void showInput() { loadScene("/org/example/mbaklala/input.fxml", "Input Berat & Tagihan"); }
     public static void showRiwayat() { loadScene("/org/example/mbaklala/riwayat.fxml", "Riwayat Transaksi"); }
 
+    // Memuat file FXML
     private static void loadScene(String fxmlPath, String title) {
         try {
             Scene scene = new Scene(new FXMLLoader(Launcher.class.getResource(fxmlPath)).load(), 1280, 720);
             stage.setTitle(title);
             stage.setScene(scene);
+            // Menampilkannya ke layar secara Fullscreen
             stage.setMaximized(true);
             stage.show();
         } catch (Exception e) {
@@ -40,3 +43,4 @@ public class Launcher extends Application {
 
     public static void main(String[] args) { launch(); }
 }
+

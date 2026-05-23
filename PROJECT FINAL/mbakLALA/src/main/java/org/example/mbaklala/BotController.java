@@ -16,6 +16,8 @@ import java.net.URI;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BotController {
     @FXML private VBox chatBox;
@@ -26,6 +28,7 @@ public class BotController {
     public static String pendingConfirmation = null;
     private static final List<Node> savedHistory = new ArrayList<>();
 
+    // Auto-scroll ke bawah saat ada pesan baru
     @FXML
     public void initialize() {
         chatBox.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -61,6 +64,14 @@ public class BotController {
             if (!found) {
                 addMessage("Maaf, pesanan dengan ID '" + input + "' tidak ditemukan. Cek kembali nomor resinya ya.", false);
             }
+            return;
+        }
+
+        if (hitungEstimasiDinamis(lowerInput)) {
+            return;
+        }
+
+        if (cekPertanyaanUmum(lowerInput)) {
             return;
         }
 
@@ -252,7 +263,6 @@ public class BotController {
                     curKategori = kat;
                 }
                 String unit = rs.getString("satuan");
-                // Penambahan Estimasi Waktu
                 res.append("• ").append(rs.getString("nama_layanan")).append("\n")
                         .append("  - Reguler (Est. 2-3 Hari): Rp ").append(String.format("%,.0f", rs.getDouble("harga_reguler"))).append("/").append(unit).append("\n")
                         .append("  - Express (Est. 1 Hari): Rp ").append(String.format("%,.0f", rs.getDouble("harga_express"))).append("/").append(unit).append("\n");
@@ -261,6 +271,191 @@ public class BotController {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    @FXML private void handleBuatPesanan() { Launcher.showPesanan(); }
-    @FXML private void handleKembali() { savedHistory.clear(); Launcher.showHome(); }
+    private boolean hitungEstimasiDinamis(String input) {
+        // PERBAIKAN: Preprocessing teks menjadi angka ("satu" jadi "1", "sepasang" jadi "1 pasang")
+        String processedInput = input.toLowerCase()
+                .replaceAll("\\bsatu\\b", "1")
+                .replaceAll("\\bdua\\b", "2")
+                .replaceAll("\\btiga\\b", "3")
+                .replaceAll("\\bempat\\b", "4")
+                .replaceAll("\\blima\\b", "5")
+                .replaceAll("\\benam\\b", "6")
+                .replaceAll("\\btujuh\\b", "7")
+                .replaceAll("\\bdelapan\\b", "8")
+                .replaceAll("\\bsembilan\\b", "9")
+                .replaceAll("\\bsepuluh\\b", "10")
+                .replaceAll("\\bsetengah\\b", "0.5")
+                .replaceAll("\\bsepasang\\b", "1 pasang")
+                .replaceAll("\\bsebuah\\b", "1 buah")
+                .replaceAll("\\bseset\\b", "1 set")
+                .replaceAll("\\bsekilo\\b", "1 kg");
+
+        String[] chunks = processedInput.split("(?i)\\+|\\bdan\\b|\\batau\\b|\\bserta\\b|,|&|\\bterus\\b|\\blalu\\b");
+
+        boolean foundAny = false;
+        double grandTotalReguler = 0;
+        double grandTotalExpress = 0;
+        StringBuilder rincianHitungan = new StringBuilder();
+
+        Pattern pattern = Pattern.compile("(\\d+(?:[.,]\\d+)?)\\s*(kg|kilo|pasang|pcs|set|buah)", Pattern.CASE_INSENSITIVE);
+
+        try (Connection conn = Database.getConnection()) {
+            for (String chunk : chunks) {
+                Matcher matcher = pattern.matcher(chunk);
+                if (matcher.find()) {
+                    String numStr = matcher.group(1).replace(",", ".");
+                    double jumlah = 0;
+                    try {
+                        jumlah = Double.parseDouble(numStr);
+                    } catch (NumberFormatException e) {
+                        continue;
+                    }
+
+                    String lowerChunk = chunk.toLowerCase();
+                    String keywordLayanan = "pakaian harian";
+
+                    if (lowerChunk.contains("sepatu")) keywordLayanan = "sepatu";
+                    else if (lowerChunk.contains("selimut double") || lowerChunk.contains("queen")) keywordLayanan = "selimut double";
+                    else if (lowerChunk.contains("selimut")) keywordLayanan = "selimut single";
+                    else if (lowerChunk.contains("bed cover")) keywordLayanan = "bed cover";
+                    else if (lowerChunk.contains("sprei")) keywordLayanan = "sprei";
+                    else if (lowerChunk.contains("jas") || lowerChunk.contains("blazer")) keywordLayanan = "jas";
+                    else if (lowerChunk.contains("tas") || lowerChunk.contains("ransel")) keywordLayanan = "tas";
+                    else if (lowerChunk.contains("boneka")) keywordLayanan = "boneka";
+                    else if (lowerChunk.contains("handuk")) keywordLayanan = "handuk";
+                    else if (lowerChunk.contains("gordyn") || lowerChunk.contains("tirai")) keywordLayanan = "gordyn";
+                    else if (lowerChunk.contains("bayi") || lowerChunk.contains("anak")) keywordLayanan = "bayi";
+                    else if (lowerChunk.contains("seragam")) keywordLayanan = "seragam";
+                    else if (lowerChunk.contains("pakaian") || lowerChunk.contains("baju") || lowerChunk.contains("kaos") || lowerChunk.contains("celana") || lowerChunk.contains("kemeja")) keywordLayanan = "pakaian harian";
+
+                    String sql = "SELECT nama_layanan, harga_reguler, harga_express, satuan FROM layanan WHERE LOWER(nama_layanan) LIKE ? LIMIT 1";
+
+                    try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                        ps.setString(1, "%" + keywordLayanan + "%");
+                        ResultSet rs = ps.executeQuery();
+
+                        if (rs.next()) {
+                            String namaLayanan = rs.getString("nama_layanan");
+                            double hargaReguler = rs.getDouble("harga_reguler");
+                            double hargaExpress = rs.getDouble("harga_express");
+                            String satuanDb = rs.getString("satuan");
+
+                            double totalReguler = jumlah * hargaReguler;
+                            double totalExpress = jumlah * hargaExpress;
+
+                            grandTotalReguler += totalReguler;
+                            grandTotalExpress += totalExpress;
+
+                            String formatJumlah = (jumlah % 1 == 0) ? String.format("%.0f", jumlah) : String.valueOf(jumlah).replace(".", ",");
+
+                            rincianHitungan.append("• ").append(formatJumlah).append(" ").append(satuanDb).append(" (").append(namaLayanan).append(")\n")
+                                    .append("  - Reguler (Est. 2-3 Hari): Rp ").append(String.format("%,.0f", totalReguler)).append("\n")
+                                    .append("  - Express (Est. 1 Hari): Rp ").append(String.format("%,.0f", totalExpress)).append("\n\n");
+
+                            foundAny = true;
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (foundAny) {
+            StringBuilder response = new StringBuilder("Berikut estimasi biaya untuk pesanan cucianmu:\n\n");
+            response.append(rincianHitungan.toString());
+
+            int itemHitung = rincianHitungan.toString().split("•").length - 1;
+            if (itemHitung > 1) {
+                response.append("Total Keseluruhan:\n")
+                        .append("- Reguler (Est. 2-3 Hari): Rp ").append(String.format("%,.0f", grandTotalReguler)).append("\n")
+                        .append("- Express (Est. 1 Hari): Rp ").append(String.format("%,.0f", grandTotalExpress)).append("\n\n");
+            }
+
+            response.append("Siap untuk dijemput kurir Launderly? Silakan klik tombol Order Laundry ya!");
+            addMessage(response.toString().trim(), false);
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean cekPertanyaanUmum(String input) {
+        // PERBAIKAN: Jika input sudah diproses sebagai angka teks (satu, dua), skip bagian ini
+        String processedInput = input.replaceAll("\\bsatu\\b|\\bdua\\b|\\btiga\\b|\\bempat\\b|\\blima\\b|\\benam\\b|\\btujuh\\b|\\bdelapan\\b|\\bsembilan\\b|\\bsepuluh\\b|\\bsepasang\\b|\\bsebuah\\b|\\bseset\\b|\\bsekilo\\b", "1");
+
+        if (!processedInput.matches(".*\\d+.*")) {
+
+            if (input.matches(".*\\b(selain|apa lagi|yang lain|lainnya)\\b.*")) {
+                String balasan = "Banyak banget kak! Sesuai dengan layanan Launderly, kami juga ahlinya mencuci:\n\n" +
+                        "• Kebutuhan Rumah (Gordyn/Tirai, Handuk)\n" +
+                        "• Perlengkapan Tidur (Selimut, Bed Cover, Sprei)\n" +
+                        "• Barang Spesial (Sepatu, Tas/Ransel, Boneka)\n" +
+                        "• Pakaian Khusus (Jas/Blazer, Seragam)\n\n" +
+                        "Ketik 'harga' untuk melihat daftar tarif lengkapnya, atau langsung sebutkan barang yang mau dicuci ya!";
+                addMessage(balasan, false);
+                return true;
+            }
+
+            if (input.matches(".*\\b(boneka)\\b.*")) {
+                addMessage("Launderly juga jago nyuci boneka lho biar wangi dan bebas debu!\n\nUntuk cuci boneka hitungannya Kiloan ya kak. Kira-kira mau cuci berapa kg boneka? (Contoh: '2 kg boneka')", false);
+                return true;
+            }
+
+            if (input.matches(".*\\b(tas|ransel)\\b.*")) {
+                addMessage("Mau cuci tas atau ransel? Kami melayani cuci tas bersih tuntas dengan hitungan satuan (pcs).\n\nAda berapa pcs tas yang mau dicuci kak? (Contoh balas: '1 pcs tas')", false);
+                return true;
+            }
+
+            if (input.matches(".*\\b(gordyn|tirai|handuk)\\b.*")) {
+                addMessage("Untuk perlengkapan rumah seperti gordyn, tirai, atau handuk, kami melayaninya dengan hitungan Kiloan kak.\n\nBerapa perkiraan beratnya? (Contoh balas: '3 kg gordyn' atau '2 kg handuk')", false);
+                return true;
+            }
+
+            if (input.matches(".*\\b(seragam|bayi|anak)\\b.*")) {
+                addMessage("Untuk seragam atau pakaian bayi/anak, Launderly menyediakan treatment pencucian khusus agar bersih maksimal dan aman (Hitungan Kiloan).\n\nBerapa kg nih kak yang mau dicuci? (Contoh: '2 kg seragam' atau '1 kg pakaian bayi')", false);
+                return true;
+            }
+
+            if (input.matches(".*\\b(selimut|bed cover|sprei)\\b.*")) {
+                addMessage("Untuk perlengkapan tidur, kami menyediakan layanan cuci:\n" +
+                        "- Selimut Single (Satuan pcs)\n" +
+                        "- Selimut Double/Queen (Satuan pcs)\n" +
+                        "- Bed Cover (Satuan pcs)\n" +
+                        "- Sprei & Sarung Bantal (Satuan set)\n\n" +
+                        "Mau cuci yang mana nih kak? Sebutkan jumlahnya ya, contoh: '1 pcs bed cover'.", false);
+                return true;
+            }
+
+            if (input.matches(".*\\b(sepatu)\\b.*")) {
+                addMessage("Wah, mau cuci sepatu ya? Launderly melayani cuci sepatu bersih tuntas dengan hitungan per pasang.\n\nBerapa pasang sepatu yang mau dicuci kak? Contoh balas: '2 pasang sepatu'.", false);
+                return true;
+            }
+
+            if (input.matches(".*\\b(baju|pakaian|kaos|kemeja|jas|blazer)\\b.*")) {
+                String balasan = "Untuk pakaian, Launderly punya beberapa pilihan kategori cucian nih kak:\n" +
+                        "1. Pakaian Harian (Kiloan)\n" +
+                        "2. Jas atau Blazer (Satuan pcs)\n\n" +
+                        "Kakak mau cuci pakaian jenis apa? Boleh sebutkan estimasi jumlahnya, contoh: '2 kg pakaian harian' atau '1 pcs jas'.";
+                addMessage(balasan, false);
+                return true;
+            }
+
+            if (input.matches(".*\\b(laundry|cuci|nyuci)\\b.*")) {
+                addMessage("Pasti kak! Launderly siap membuat cucianmu bersih dan wangi.\n\n" +
+                        "Barang apa yang mau kakak cuci hari ini? (Misal: baju, sepatu, tas, boneka, atau selimut)\n" +
+                        "Kakak juga bisa langsung sebutkan jumlahnya lho, contoh: '2 kg boneka'.", false);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @FXML private void handleBuatPesanan() {
+        Launcher.showPesanan();
+    }
+    @FXML private void handleKembali() {
+        savedHistory.clear();
+        Launcher.showHome();
+    }
 }
