@@ -24,11 +24,12 @@ public class PesananController {
     @FXML private TextField txtTelepon;
     @FXML private TextArea txtAlamat;
     @FXML private VBox vboxDaftarLayanan;
-    @FXML private ComboBox<String> cbTipePesanan; // Ditambahkan untuk Tipe Global
+    @FXML private ComboBox<String> cbTipePesanan;
     @FXML private TextField txtCatatan;
     @FXML private ComboBox<String> cbPembayaran;
 
     private ObservableList<String> daftarBarang = FXCollections.observableArrayList();
+    private ObservableList<String> daftarTipe = FXCollections.observableArrayList("Reguler", "Express");
 
     @FXML
     public void initialize() {
@@ -38,8 +39,15 @@ public class PesananController {
         cbPembayaran.setItems(FXCollections.observableArrayList("Cash", "QRIS"));
         cbPembayaran.setValue("Cash");
 
-        // Inisialisasi Tipe Pesanan
         cbTipePesanan.setItems(FXCollections.observableArrayList("Reguler", "Express"));
+
+        // Telepon cuma bisa diisi ANGKA
+        txtTelepon.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                // Hapus semua karakter yang bukan angka secara otomatis saat diketik
+                txtTelepon.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
     }
 
     private void loadLayananDariDatabase() {
@@ -62,7 +70,7 @@ public class PesananController {
 
         ComboBox<String> cbBarang = new ComboBox<>(daftarBarang);
         cbBarang.setPromptText("Pilih Barang...");
-        cbBarang.setPrefWidth(250); // Lebar ditambah karena dropdown tipe dihapus dari baris ini
+        cbBarang.setPrefWidth(250);
         cbBarang.setStyle("-fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 6; -fx-font-family: 'Segoe UI';");
 
         Button btnTambah = new Button("Tambah");
@@ -93,14 +101,24 @@ public class PesananController {
         String alamat = txtAlamat.getText().trim();
         String catatan = txtCatatan.getText().trim();
         String metodeBayar = cbPembayaran.getValue();
-        String tipePesanan = cbTipePesanan.getValue(); // Ambil tipe global
+        String tipePesanan = cbTipePesanan.getValue();
 
-        // Validasi form termasuk Tipe Pesanan
+        // Validasi Kekosongan
         if (nama.isEmpty() || telp.isEmpty() || tipePesanan == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Peringatan");
             alert.setHeaderText(null);
             alert.setContentText("Nama Lengkap, Nomor Telepon, dan Tipe Pesanan wajib diisi!");
+            alert.showAndWait();
+            return;
+        }
+
+        // no hp minimal 10 angka
+        if (telp.length() < 10) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Peringatan");
+            alert.setHeaderText(null);
+            alert.setContentText("Nomor Telepon tidak valid! Pastikan kamu memasukkan minimal 10 angka.");
             alert.showAndWait();
             return;
         }
@@ -143,7 +161,6 @@ public class PesananController {
                 ps1.executeUpdate();
             }
 
-            // Memasukkan rincian layanan menggunakan tipePesanan global
             String sqlLayanan = "INSERT INTO pesanan_layanan (id_pesanan, id_layanan, jenis_layanan) VALUES (?, (SELECT id_layanan FROM layanan WHERE nama_layanan = ?), ?)";
             try (PreparedStatement ps2 = conn.prepareStatement(sqlLayanan)) {
                 for (Node node : vboxDaftarLayanan.getChildren()) {
@@ -157,7 +174,7 @@ public class PesananController {
 
                             ps2.setString(1, idPesanan);
                             ps2.setString(2, cbB.getValue());
-                            ps2.setString(3, tipePesanan); // Masukkan tipe Reguler/Express ke setiap item
+                            ps2.setString(3, tipePesanan);
                             ps2.executeUpdate();
                         }
                     }

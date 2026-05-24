@@ -28,7 +28,6 @@ public class BotController {
     public static String pendingConfirmation = null;
     private static final List<Node> savedHistory = new ArrayList<>();
 
-    // Auto-scroll ke bawah saat ada pesan baru
     @FXML
     public void initialize() {
         chatBox.heightProperty().addListener((obs, oldVal, newVal) -> {
@@ -46,14 +45,27 @@ public class BotController {
             pendingConfirmation = null;
         }
     }
-
+    
     @FXML
     private void handleSend(ActionEvent event) {
-        String input = (event.getSource() instanceof Button btn && btn.getUserData() != null) ? btn.getUserData().toString() : inputField.getText().trim();
-        if (input.isEmpty()) return;
+        String teksTampil = "";
+        String teksProses = "";
+
+        if (event.getSource() instanceof Button btn && btn.getUserData() != null) {
+            teksTampil = btn.getText();
+            teksProses = btn.getUserData().toString();
+        }
+
+        else {
+            teksTampil = inputField.getText().trim();
+            teksProses = teksTampil;
+        }
+
+        if (teksTampil.isEmpty()) return;
+
         inputField.clear();
-        addMessage(input, true);
-        processInput(input);
+        addMessage(teksTampil, true);
+        processInput(teksProses);
     }
 
     private void processInput(String input) {
@@ -272,7 +284,6 @@ public class BotController {
     }
 
     private boolean hitungEstimasiDinamis(String input) {
-        // PERBAIKAN: Preprocessing teks menjadi angka ("satu" jadi "1", "sepasang" jadi "1 pasang")
         String processedInput = input.toLowerCase()
                 .replaceAll("\\bsatu\\b", "1")
                 .replaceAll("\\bdua\\b", "2")
@@ -381,7 +392,6 @@ public class BotController {
     }
 
     private boolean cekPertanyaanUmum(String input) {
-        // PERBAIKAN: Jika input sudah diproses sebagai angka teks (satu, dua), skip bagian ini
         String processedInput = input.replaceAll("\\bsatu\\b|\\bdua\\b|\\btiga\\b|\\bempat\\b|\\blima\\b|\\benam\\b|\\btujuh\\b|\\bdelapan\\b|\\bsembilan\\b|\\bsepuluh\\b|\\bsepasang\\b|\\bsebuah\\b|\\bseset\\b|\\bsekilo\\b", "1");
 
         if (!processedInput.matches(".*\\d+.*")) {
