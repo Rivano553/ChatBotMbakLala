@@ -10,7 +10,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.example.mbaklala.BotController;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -25,24 +24,24 @@ public class PesananController {
     @FXML private TextField txtTelepon;
     @FXML private TextArea txtAlamat;
     @FXML private VBox vboxDaftarLayanan;
+    @FXML private ComboBox<String> cbTipePesanan; // Ditambahkan untuk Tipe Global
     @FXML private TextField txtCatatan;
     @FXML private ComboBox<String> cbPembayaran;
 
-    // Menyimpan daftar layanan dari database
     private ObservableList<String> daftarBarang = FXCollections.observableArrayList();
-    private ObservableList<String> daftarTipe = FXCollections.observableArrayList("Reguler", "Express");
 
     @FXML
     public void initialize() {
         loadLayananDariDatabase();
         tambahBarisInput();
 
-        // Set default pilihan pembayaran
         cbPembayaran.setItems(FXCollections.observableArrayList("Cash", "QRIS"));
         cbPembayaran.setValue("Cash");
+
+        // Inisialisasi Tipe Pesanan
+        cbTipePesanan.setItems(FXCollections.observableArrayList("Reguler", "Express"));
     }
 
-    // Menarik daftar nama layanan database
     private void loadLayananDariDatabase() {
         daftarBarang.clear();
         try (Connection conn = Database.getConnection();
@@ -57,20 +56,14 @@ public class PesananController {
         }
     }
 
-    // ComboBox laundry
     private void tambahBarisInput() {
         HBox barisBaru = new HBox(10);
         barisBaru.setAlignment(Pos.CENTER_LEFT);
 
         ComboBox<String> cbBarang = new ComboBox<>(daftarBarang);
         cbBarang.setPromptText("Pilih Barang...");
-        cbBarang.setPrefWidth(200);
+        cbBarang.setPrefWidth(250); // Lebar ditambah karena dropdown tipe dihapus dari baris ini
         cbBarang.setStyle("-fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 6; -fx-font-family: 'Segoe UI';");
-
-        ComboBox<String> cbTipe = new ComboBox<>(daftarTipe);
-        cbTipe.setPromptText("Tipe...");
-        cbTipe.setPrefWidth(120);
-        cbTipe.setStyle("-fx-background-color: #F8F9FA; -fx-border-color: #BDC3C7; -fx-border-radius: 6; -fx-font-family: 'Segoe UI';");
 
         Button btnTambah = new Button("Tambah");
         btnTambah.setStyle("-fx-background-color: transparent; -fx-border-color: #30a8d4; -fx-text-fill: #30a8d4; -fx-border-radius: 6; -fx-font-weight: bold; -fx-cursor: hand; -fx-font-family: 'Segoe UI';");
@@ -84,7 +77,7 @@ public class PesananController {
             }
         });
 
-        barisBaru.getChildren().addAll(cbBarang, cbTipe, btnTambah, btnHapus);
+        barisBaru.getChildren().addAll(cbBarang, btnTambah, btnHapus);
         vboxDaftarLayanan.getChildren().add(barisBaru);
     }
 
@@ -100,18 +93,18 @@ public class PesananController {
         String alamat = txtAlamat.getText().trim();
         String catatan = txtCatatan.getText().trim();
         String metodeBayar = cbPembayaran.getValue();
+        String tipePesanan = cbTipePesanan.getValue(); // Ambil tipe global
 
-        // Cek kekosongan data
-        if (nama.isEmpty() || telp.isEmpty()) {
+        // Validasi form termasuk Tipe Pesanan
+        if (nama.isEmpty() || telp.isEmpty() || tipePesanan == null) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Peringatan");
             alert.setHeaderText(null);
-            alert.setContentText("Nama Lengkap dan Nomor Telepon wajib diisi!");
+            alert.setContentText("Nama Lengkap, Nomor Telepon, dan Tipe Pesanan wajib diisi!");
             alert.showAndWait();
             return;
         }
 
-        // Pesanan sebelumnya belum Selesai
         try (Connection conn = Database.getConnection()) {
             String sqlCek = "SELECT status FROM pesanan WHERE LOWER(nama_pelanggan) = LOWER(?) AND status != 'Selesai' LIMIT 1";
             try (PreparedStatement psCek = conn.prepareStatement(sqlCek)) {
@@ -131,7 +124,6 @@ public class PesananController {
             e.printStackTrace();
         }
 
-        // Membuat ID Pesanan
         String timeStamp = new SimpleDateFormat("ddMMyy").format(new Date());
         int randomNum = (int) (Math.random() * 9000) + 1000;
         String idPesanan = "LND-" + timeStamp + "-" + randomNum;
@@ -139,7 +131,6 @@ public class PesananController {
         StringBuilder rincian = new StringBuilder();
         int jumlahLayanan = 0;
 
-        // Simpan ke database
         try (Connection conn = Database.getConnection()) {
             String sqlPesanan = "INSERT INTO pesanan (id_pesanan, nama_pelanggan, no_telepon, alamat_jemput, deskripsi, metode_pembayaran) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement ps1 = conn.prepareStatement(sqlPesanan)) {
@@ -152,22 +143,21 @@ public class PesananController {
                 ps1.executeUpdate();
             }
 
+            // Memasukkan rincian layanan menggunakan tipePesanan global
             String sqlLayanan = "INSERT INTO pesanan_layanan (id_pesanan, id_layanan, jenis_layanan) VALUES (?, (SELECT id_layanan FROM layanan WHERE nama_layanan = ?), ?)";
             try (PreparedStatement ps2 = conn.prepareStatement(sqlLayanan)) {
                 for (Node node : vboxDaftarLayanan.getChildren()) {
                     if (node instanceof HBox row) {
                         @SuppressWarnings("unchecked")
                         ComboBox<String> cbB = (ComboBox<String>) row.getChildren().get(0);
-                        @SuppressWarnings("unchecked")
-                        ComboBox<String> cbT = (ComboBox<String>) row.getChildren().get(1);
 
-                        if (cbB.getValue() != null && cbT.getValue() != null) {
-                            rincian.append("- ").append(cbB.getValue()).append(" [").append(cbT.getValue()).append("]\n");
+                        if (cbB.getValue() != null) {
+                            rincian.append("- ").append(cbB.getValue()).append("\n");
                             jumlahLayanan++;
 
                             ps2.setString(1, idPesanan);
                             ps2.setString(2, cbB.getValue());
-                            ps2.setString(3, cbT.getValue());
+                            ps2.setString(3, tipePesanan); // Masukkan tipe Reguler/Express ke setiap item
                             ps2.executeUpdate();
                         }
                     }
@@ -183,7 +173,6 @@ public class PesananController {
             return;
         }
 
-        // Minimal 1 barang dipilih
         if (jumlahLayanan == 0) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Peringatan");
@@ -198,6 +187,7 @@ public class PesananController {
                 "Nama: " + nama + "\n" +
                 "No. Telp: " + telp + "\n" +
                 "Alamat Jemput:\n" + alamat + "\n\n" +
+                "Tipe Pengerjaan: " + tipePesanan + "\n" +
                 "Rincian Layanan:\n" + rincian.toString() + "\n" +
                 "Metode Pembayaran: " + metodeBayar + "\n" +
                 (!catatan.isEmpty() ? "Catatan: " + catatan + "\n\n" : "") +
