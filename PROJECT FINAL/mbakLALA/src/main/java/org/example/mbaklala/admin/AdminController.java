@@ -14,22 +14,17 @@ public class AdminController {
     public void initialize() {
         try (Connection conn = Database.getConnection(); Statement st = conn.createStatement()) {
 
-            // 1. Menunggu Jemput
+            // status pesanan
             lblJemput.setText(getCount(st, "Menunggu Jemput"));
 
-            // 2. Antre Cuci
             lblAntre.setText(getCount(st, "Antre Cuci"));
 
-            // 3. Proses Cuci & Setrika
             lblProses.setText(getCount(st, "Proses Cuci & Setrika"));
 
-            // 4. Siap Antar
             lblSiap.setText(getCount(st, "Siap Antar"));
 
-            // 5. Sedang Diantar
             lblDiantar.setText(getCount(st, "Sedang Diantar"));
 
-            // 6. Selesai
             lblSelesai.setText(getCount(st, "Selesai"));
 
             // 7. Total Pendapatan
@@ -42,7 +37,7 @@ public class AdminController {
                 lblPendapatan.setText("Rp " + String.format("%,.0f", total));
             }
 
-            // Aktivitas Terbaru
+            // Menampilkan aktivitas terbaru setelah order laundry
             ResultSet rs5 = st.executeQuery("SELECT nama_pelanggan, status FROM pesanan ORDER BY tgl_masuk DESC LIMIT 1");
             if (rs5.next()) {
                 lblNama.setText("Pesanan terbaru dari " + rs5.getString("nama_pelanggan") + " (Status: " + rs5.getString("status") + ")");
@@ -51,6 +46,7 @@ public class AdminController {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
+    // Query jumlah pesanan berdasarkan status tertentu
     private String getCount(Statement st, String status) throws SQLException {
         ResultSet rs = st.executeQuery("SELECT COUNT(*) as total FROM pesanan WHERE status = '" + status + "'");
         return rs.next() ? rs.getString("total") : "0";

@@ -54,7 +54,7 @@ public class RiwayatController {
                 lblTelp.setText(rs.getString("no_telepon"));
                 lblAlamat.setText(rs.getString("alamat_jemput"));
 
-                // TAMBAHAN: Mengambil data pembayaran
+                // Mengambil data pembayaran
                 String metode = rs.getString("metode_pembayaran");
                 String statusBayar = rs.getString("status_bayar");
 

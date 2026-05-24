@@ -45,7 +45,7 @@ public class BotController {
             pendingConfirmation = null;
         }
     }
-    
+
     @FXML
     private void handleSend(ActionEvent event) {
         String teksTampil = "";
